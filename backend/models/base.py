@@ -34,8 +34,10 @@ class BaseModel:
         return '[{}] ({}) {}'.format(classname, self.id, self.__dict__)
 
     def save(self):
+        from backend.models import storage
         self.updated_at = datetime.utcnow()
-        pass
+        storage.new(self)
+        storage.save()
     
     def to_dict(self) -> dict:
         """Converts object to dict format
@@ -45,10 +47,15 @@ class BaseModel:
         """
         dictionary = self.__dict__.copy()
         dictionary['__class__'] = self.__class__.__name__
-        dictionary['created_at'] = self.created_at.strftime(time)
-        dictionary['updated_at'] = self.updated_at.strftime(time)
+        if not isinstance(dictionary['created_at'], str):
+            dictionary['created_at'] = self.created_at.strftime(time)
+        if not isinstance(dictionary['updated_at'], str):
+            dictionary['updated_at'] = self.updated_at.strftime(time)
         return dictionary
     
     def delete(self):
         """Delete an instance from the storage"""
-        pass
+        from backend.models import storage
+        storage.delete(self)
+        storage.save()
+        

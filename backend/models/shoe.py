@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Shoe Model Class
 """
-from base import BaseModel
+from backend.models.base import BaseModel
 
 
 class Shoe(BaseModel):
@@ -17,9 +17,9 @@ class Shoe(BaseModel):
                 if key != "__class__":
                     setattr(self, key, value)
         else:
-            self.shoe_name = ""
-            self.shoe_category = ""
-            self.shoe_brand = ""
-            self.shoe_price = ""
-            self.shoe_color = ""
+            self.shoe_name = "" # name of shoe like sneakers etc
+            self.shoe_category = "" # category like for men, women or sports
+            self.shoe_brand = "" # brand like nike etc
+            self.shoe_price = "" # price of shoe
+            self.shoe_color = "" # the color of shoe
         

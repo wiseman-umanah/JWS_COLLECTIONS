@@ -1,4 +1,4 @@
-from base import BaseModel
+from backend.models.base import BaseModel
 
 class User(BaseModel):
     def __init__(self, *args, **kwargs):
@@ -11,6 +11,7 @@ class User(BaseModel):
             self.username = ""
             self.firstname = ""
             self.lastname = ""
+            self.password = ""
             self.email = "example@gmail.com"
             self.phoneNumber = 12345678
             self.items_id = [] # track user items id (user relationship with shoe)
