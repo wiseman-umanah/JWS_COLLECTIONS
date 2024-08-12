@@ -14,7 +14,7 @@ class FileStorage:
     """serializes instances to a JSON file & deserializes back to instances"""
 
     # string - path to the JSON file
-    __file_path = "data.json"
+    __file_path = "database.json"
     # dictionary - empty but will store all objects by <class name>.id
     __objects = {}
 
