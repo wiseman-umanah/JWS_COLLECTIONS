@@ -20,11 +20,10 @@ class FileStorage:
 
     def all(self, cls=None):
         """returns the dictionary __objects"""
-        if cls is not None:
-            new_dict = {}
-            for key, value in self.__objects.items():
-                if cls == value.__class__ or cls == value.__class__.__name__:
-                    new_dict[key] = value
+        if cls:
+            if isinstance(cls, str):
+                cls = classes.get(cls)
+            new_dict = {key: value for key, value in self.__objects.items() if isinstance(value, cls)}
             return new_dict
         return self.__objects
 
@@ -35,24 +34,25 @@ class FileStorage:
             self.__objects[key] = obj
 
     def save(self):
-        """serializes __objects to the JSON file (path: __file_path)"""
-        json_objects = {}
-        for key in self.__objects:
-            if key == "password":
-                json_objects[key].decode()
-            json_objects[key] = self.__objects[key].to_dict()
+        """Save objects to a JSON file"""
+        json_objects = {key: obj.to_dict() for key, obj in self.__objects.items()}
         with open(self.__file_path, 'w') as f:
             json.dump(json_objects, f)
 
     def reload(self):
-        """deserializes the JSON file to __objects"""
+        """Deserializes the JSON file to __objects"""
         try:
             with open(self.__file_path, 'r') as f:
                 jo = json.load(f)
             for key in jo:
                 self.__objects[key] = classes[jo[key]["__class__"]](**jo[key])
-        except:
-            pass
+        except FileNotFoundError:
+            print("File not found. Starting with an empty storage.")
+        except json.JSONDecodeError:
+            print("Error decoding JSON. The file may be corrupted.")
+        except KeyError as e:
+            print(f"Missing class {e} in JSON data.")
+
 
     def delete(self, obj=None):
         """delete obj from __object if it’s inside"""
@@ -65,34 +65,28 @@ class FileStorage:
         """call reload() method for deserializing the JSON file to objects"""
         self.reload()
 
-    def get(self, cls, id):
-        from backend.models import storage
-        """
-        Returns the object based on the class name and its ID, or
-        None if not found
-        """
-        if cls not in classes.values():
-            return None
-
-        all_cls = storage.all(cls)
+    def get_user_by_email(self, email):
+        """Returns the user object based on email"""
+        all_cls = self.all(User)
         for value in all_cls.values():
-            if (value.id == id):
+            if value.email == email:
                 return value
-
         return None
 
+    def get(self, cls, id):
+        """Returns the object based on class name and ID"""
+        if cls not in classes.values():
+            return None
+        all_cls = self.all(cls)
+        for value in all_cls.values():
+            if value.id == id:
+                return value
+        return None
+
+
     def count(self, cls=None):
-        """
-        count the number of objects in storage
-        """
-        from backend.models import storage
-        all_class = classes.values()
+        """Count the number of objects in storage"""
+        if cls:
+            return len(self.all(cls).values())
+        return len(self.__objects)
 
-        if not cls:
-            count = 0
-            for clas in all_class:
-                count += len(storage.all(clas).values())
-        else:
-            count = len(storage.all(cls).values())
-
-        return count

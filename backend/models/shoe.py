@@ -28,11 +28,7 @@ class Shoe(BaseModel):
 
     @property
     def shoe_price(self) -> float:
-        """shoe price
-
-        Returns:
-            float: returns shoe price
-        """
+        """Shoe price"""
         return self._shoe_price
 
     @shoe_price.setter
@@ -45,11 +41,7 @@ class Shoe(BaseModel):
 
     @property
     def shoe_image(self) -> str:
-        """get shoe image path
-
-        Returns:
-            str: path to image
-        """
+        """Get shoe image path"""
         return self._shoe_image
 
     @shoe_image.setter

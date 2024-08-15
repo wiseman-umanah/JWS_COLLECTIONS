@@ -11,19 +11,19 @@ time = "%Y-%m-%dT%H:%M:%S.%f"
 class BaseModel:
     def __init__(self, *args, **kwargs):
         """Initializes a base model"""
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.utcnow()
+        self.updated_at = self.created_at
+
         if kwargs:
             for key, value in kwargs.items():
                 if key != "__class__":
                     setattr(self, key, value)
-            if kwargs.get("created_at", None) and isinstance(self.created_at, str):
-                self.created_at = datetime.strptime(kwargs["created_at"], time)
-            if kwargs.get("updated_at", None) and isinstance(self.updated_at, str):
-                self.updated_at = datetime.strptime(kwargs["updated_at"], time)
-        else:
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.utcnow()
-            self.updated_at = self.created_at
-    
+            if 'created_at' in kwargs:
+                self.created_at = datetime.strptime(kwargs['created_at'], time)
+            if 'updated_at' in kwargs:
+                self.updated_at = datetime.strptime(kwargs['updated_at'], time)
+
     def __str__(self) -> str:
         """string representation of class models
 
@@ -40,18 +40,18 @@ class BaseModel:
         storage.save()
     
     def to_dict(self) -> dict:
-        """Converts object to dict format
-
-        Returns:
-            dict: dictionary rep of the object
-        """
+        """Converts object to dict format"""
         dictionary = self.__dict__.copy()
         dictionary['__class__'] = self.__class__.__name__
-        if not isinstance(dictionary['created_at'], str):
-            dictionary['created_at'] = self.created_at.strftime(time)
-        if not isinstance(dictionary['updated_at'], str):
-            dictionary['updated_at'] = self.updated_at.strftime(time)
+        try:
+            if not isinstance(dictionary['created_at'], str):
+                dictionary['created_at'] = self.created_at.strftime(time)
+            if not isinstance(dictionary['updated_at'], str):
+                dictionary['updated_at'] = self.updated_at.strftime(time)
+        except AttributeError as e:
+            print(f"Error converting to dictionary: {e}")
         return dictionary
+
     
     def delete(self):
         """Delete an instance from the storage"""
