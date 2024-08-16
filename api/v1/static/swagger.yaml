@@ -1,0 +1,219 @@
+openapi: 3.0.0
+info:
+  title: JWS COLLECTIONS API
+  version: 1.0.0
+paths:
+  /api/v1/login:
+    post:
+      summary: User login
+      description: Handles user login and issues JWT tokens.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "user@example.com"
+                password:
+                  type: string
+                  format: password
+                  example: "yourpassword"
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid credentials"
+  /api/v1/signup:
+    post:
+      summary: User Signup
+      description: Creates a new user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "user@example.com"
+                password:
+                  type: string
+                  format: password
+                  example: "yourpassword"
+                username:
+                  type: string
+                  example: "Bobby"
+                firstname:
+                  type: string
+                  example: "Bob"
+                lastname:
+                  type: string
+                  example: "Dylan"
+                phoneNumber:
+                  type: string
+                  example: "08028392192"
+      responses:
+        '201':
+          description: Creates a new user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User created successfully"
+        '400':
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Email address already exists"
+        '500':
+          description: Error in processing data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error Message Expected"
+  /api/v1/logout:
+    post:
+      summary: User logout
+      description: Handles user logout.
+      security:
+        - bearerAuth: [] 
+      responses:
+        '200':
+          description: Successful logout
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User logged out"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid or missing token"
+  /api/v1/products:
+    get:
+      summary: Get all products
+      description: Returns JSON format of all products.
+      responses:
+        '200':
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "abc123"
+                    name:
+                      type: string
+                      example: "Product Name"
+                    description:
+                      type: string
+                      example: "Product Description"
+                    price:
+                      type: number
+                      format: float
+                      example: 19.99
+        '404':
+          description: No products found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Product not found"
+  /api/v1/products/{id}:
+    get:
+      summary: Get a product by ID
+      description: Returns product based on ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The product ID
+      responses:
+        '200':
+          description: A product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "abc123"
+                  name:
+                    type: string
+                    example: "Product Name"
+                  description:
+                    type: string
+                    example: "Product Description"
+                  price:
+                    type: number
+                    format: float
+                    example: 19.99
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Product not found"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

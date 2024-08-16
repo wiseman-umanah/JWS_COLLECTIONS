@@ -15,12 +15,12 @@ def get_products():
         abort(404)
     for prods in products:
         list_products.append(prods.to_dict())
-    return jsonify(list_products)
+    return jsonify(list_products), 200
 
 @app_views.route('/products/<id>', methods=['GET'], strict_slashes=False)
 def get_productById(id):
     """Returns product based on id"""
     shoe_obj = storage.get(Shoe, id)
     if not shoe_obj:
-        return jsonify({'error': 'Product not found'})
-    return jsonify(shoe_obj.to_dict())
+        return jsonify({'error': 'Product not found'}), 404
+    return jsonify(shoe_obj.to_dict()), 200
