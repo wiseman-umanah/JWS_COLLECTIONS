@@ -2,7 +2,7 @@
 from api.v1.views import app_views
 from backend.models import storage
 from backend.models.shoe import Shoe
-from flask import jsonify, abort, request
+from flask import jsonify, request
 from flask_jwt_extended import jwt_required
 from api.v1.utils.authorization import role_required
 
@@ -10,13 +10,57 @@ from api.v1.utils.authorization import role_required
 @app_views.route('/products', methods=['GET'], strict_slashes=False)
 def get_products():
     """Returns JSON format of all products"""
-    list_products = []
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    category = request.args.get('category')
+    brand = request.args.get('brand')
+    min_price = request.args.get('min_price', type=float)
+    max_price = request.args.get('max_price', type=float)
+    color = request.args.get('color')
+
     products = storage.all(Shoe).values()
     if not products:
-        abort(404)
-    for prods in products:
-        list_products.append(prods.to_dict())
-    return jsonify(list_products), 200
+        return jsonify({
+            'page': page,
+            'per_page': per_page,
+            'total_products': 0,
+            'total_pages': 0,
+            'products': []
+        }), 200
+    
+    # Apply filtering
+    if category:
+        products = [product for product in products if product.shoe_category == category]
+    if brand:
+        products = [product for product in products if product.shoe_brand == brand]
+    if min_price is not None:
+        products = [product for product in products if product.shoe_price >= min_price]
+    if max_price is not None:
+        products = [product for product in products if product.shoe_price <= max_price]
+    if color:
+        products = [product for product in products if product.shoe_color == color]
+
+    # Calculate total pages ( page details )
+    total_products = len(products)
+    total_pages = (total_products + per_page - 1) // per_page
+
+    # Paginate products
+    start = (page - 1) * per_page
+    end = start + per_page
+    paginated_products = products[start:end]
+
+    if start >= total_products:
+        paginated_products = []
+
+    response = {
+        'page': page,
+        'per_page': per_page,
+        'total_products': total_products,
+        'total_pages': total_pages,
+        'products': [prods.to_dict() for prods in paginated_products]
+    }
+    
+    return jsonify(response), 200
 
 @app_views.route('/products/<id>', methods=['GET'], strict_slashes=False)
 def get_productById(id):
