@@ -6,9 +6,12 @@ Contains the FileStorage class
 import json
 from backend.models.shoe import Shoe
 from backend.models.user import User
+from backend.models.cart import Cart
+from backend.models.cartitem import CartItem
 
 
-classes = {"User": User, "Shoe": Shoe}
+classes = {"User": User, "Shoe": Shoe,
+           "Cart": Cart, "CartItem": CartItem}
 
 class FileStorage:
     """serializes instances to a JSON file & deserializes back to instances"""
@@ -70,6 +73,14 @@ class FileStorage:
         all_cls = self.all(User)
         for value in all_cls.values():
             if value.email == email:
+                return value
+        return None
+    
+    def get_cart_by_userId(self, user_id):
+        """Returns cart object of a user"""
+        all_cls = self.all(Cart)
+        for value in all_cls.values():
+            if value.user_id == user_id:
                 return value
         return None
 

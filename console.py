@@ -6,8 +6,11 @@ from backend.models import storage
 from backend.models.user import User
 from backend.models.shoe import Shoe
 import shlex  # for splitting the line along spaces except in double quotes
+from backend.models.cart import Cart
 
-classes = {"Shoe": Shoe, "User": User}
+
+classes = {"Shoe": Shoe, "User": User,
+           "Cart": Cart}
 
 
 class JWS(cmd.Cmd):

@@ -45,4 +45,4 @@ class CartItem(BaseModel):
                 raise ValueError("Cart item price must be a non-negative number")
             
         def update_total_price(self):
-            self.total_price = self.quatity * self.price
+            self.total_price = self.quantity * self.price

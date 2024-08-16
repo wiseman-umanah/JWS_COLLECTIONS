@@ -16,14 +16,17 @@ class Cart(BaseModel):
 
     def add_item(self, shoe_id, quantity, price):
         """Add an item to the cart or update quantity if it already exists"""
-        for item in self.items:
-            if item.shoe_id == shoe_id:
-                item.quantity += quantity
-                item.update_total_price()
-                return
-
-        new_item = CartItem(cart_id=self.id, shoe_id=shoe_id, quantity=quantity, price=price)
-        self.items.append(new_item)
+        item = None
+        for i in self.items:
+            if i.shoe_id == shoe_id:
+                item = i
+                break
+        if item:
+            item.quantity += quantity
+            item.total_price = item.quantity * price
+        else:
+            new_item = CartItem(cart_id=self.id, shoe_id=shoe_id, quantity=quantity, price=price)
+            self.items.append(new_item)
 
     def update_quantity(self, shoe_id, quantity):
         """Update the quantity of an item in the cart"""
