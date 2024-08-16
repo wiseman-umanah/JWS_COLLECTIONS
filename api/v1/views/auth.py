@@ -3,7 +3,7 @@ from api.v1.views import app_views
 from backend.models.user import User
 from backend.models import storage
 from flask import jsonify, request
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, jwt_required
 
 @app_views.route('/login', methods=['POST'], strict_slashes=False)
 def login_post():

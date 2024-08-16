@@ -1,5 +1,4 @@
 from backend.models.base import BaseModel
-from backend.models import storage
 from backend.models.cartitem import CartItem
 
 class Cart(BaseModel):
