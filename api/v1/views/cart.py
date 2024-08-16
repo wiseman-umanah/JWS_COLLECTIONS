@@ -14,7 +14,7 @@ from api.v1.utils.authorization import get_current_user
 @jwt_required()
 @role_required('admin')
 def get_allCarts():
-    """Returns JSON format of all products"""
+    """Returns JSON format of all carts"""
     list_carts = []
     carts = storage.all(Cart).values()
     if not carts:

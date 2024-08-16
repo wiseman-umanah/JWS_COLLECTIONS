@@ -8,10 +8,12 @@ from backend.models.shoe import Shoe
 from backend.models.user import User
 from backend.models.cart import Cart
 from backend.models.cartitem import CartItem
+from backend.models.order import Order
 
 
 classes = {"User": User, "Shoe": Shoe,
-           "Cart": Cart, "CartItem": CartItem}
+           "Cart": Cart, "CartItem": CartItem,
+           "Order": Order}
 
 class FileStorage:
     """serializes instances to a JSON file & deserializes back to instances"""
