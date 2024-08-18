@@ -27,3 +27,15 @@ class Order(BaseModel):
     def calculate_total(self):
         """Calculate the total price of the order."""
         self.total_price = sum(item.total_price for item in self.items)
+
+    def to_dict(self):
+        """Convert Cart to a dictionary for JSON serialization"""
+        dict_cart = super().to_dict()
+        dict_cart.update({
+            'user_id': self.user_id,
+            'items': [item.to_dict() for item in self.items],
+            'total_price': self.total_price,
+            'status': self.status
+        })
+        return dict_cart
+    
