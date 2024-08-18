@@ -9,14 +9,15 @@ def role_required(role):
         @wraps(fn)
         def wrapper(*args, **kwargs):
             claims = get_jwt()
-            if claims.get('role') != role:
+            if claims.get('sub').get('role') != role:
                 return jsonify({'message': 'Access forbidden: insufficient privileges'}), 403
             return fn(*args, **kwargs)
         return wrapper
     return decorator
 
 def get_current_user():
-    user_id = get_jwt_identity()
+    user = get_jwt_identity()
+    user_id = user.get('id')
     if user_id:
         return storage.get(User, user_id)
     return None

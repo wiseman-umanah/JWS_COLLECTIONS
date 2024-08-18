@@ -6,11 +6,10 @@ from backend.models import storage
 from backend.models.user import User
 from backend.models.shoe import Shoe
 import shlex  # for splitting the line along spaces except in double quotes
-from backend.models.cart import Cart
+# from backend.models.cart import Cart
 
 
-classes = {"Shoe": Shoe, "User": User,
-           "Cart": Cart}
+classes = {"Shoe": Shoe, "User": User}
 
 
 class JWS(cmd.Cmd):
@@ -32,8 +31,7 @@ class JWS(cmd.Cmd):
     def do_create(self, arg):
         """Creates a new instance of a class"""
         exclude = (
-            'id', 'created_at', 'updated_at',
-            'items_id', 'is_authenticated', '__class__'
+            'id', 'created_at', 'updated_at', '__class__'
         )
         args = shlex.split(arg)
         if len(args) == 0:

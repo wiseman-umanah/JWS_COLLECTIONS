@@ -18,7 +18,8 @@ def get_products():
     max_price = request.args.get('max_price', type=float)
     color = request.args.get('color')
 
-    products = storage.all(Shoe).values()
+    products = list(storage.all(Shoe).values())
+
     if not products:
         return jsonify({
             'page': page,
@@ -75,8 +76,18 @@ def get_productById(id):
 @role_required('admin')
 def create_product():
     data = request.get_json()
+    shoe_name = data.get('shoe_name')
+    shoe_category = data.get('shoe_category')
+    shoe_brand = data.get('shoe_brand')
+    shoe_price = data.get('shoe_price')
+    shoe_color = data.get('shoe_color')
+    shoe_image = data.get('shoe_image')
     try:
-        new_product = Shoe(**data)
+        new_product = Shoe(
+            shoe_name=shoe_name, shoe_category=shoe_category,
+            shoe_brand=shoe_brand, shoe_price=shoe_price,
+            shoe_color=shoe_color, shoe_image=shoe_image
+            )
         storage.new(new_product)
         storage.save()
         return jsonify(new_product.to_dict()), 201

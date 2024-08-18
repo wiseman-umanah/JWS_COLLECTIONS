@@ -153,6 +153,8 @@ paths:
                 type: array
                 items:
                   type: object
+                user_id:
+                  type: string
         '401':
           description: Unauthorized
           content:
@@ -191,6 +193,11 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  items:
+                    type: array
+                  user_id:
+                    type: string
         '404':
           description: Cart not found
           content:
@@ -214,6 +221,11 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  items:
+                    type: array
+                  user_id:
+                    type: string
         '404':
           description: User not found
           content:
@@ -289,7 +301,7 @@ paths:
       summary: Get all orders
       description: Returns a JSON format of all orders.
       security:
-        - jwt: []
+        - bearerAuth: []
         - role: ['admin']
       responses:
         '200':
@@ -395,7 +407,7 @@ paths:
       summary: Handle checkout
       description: Handles the checkout process for a user's cart.
       security:
-        - jwt: []
+        - bearerAuth: []
       responses:
         '200':
           description: Checkout successful
@@ -526,21 +538,67 @@ paths:
       summary: Create a new product
       description: Creates a new product in the catalog. Admin access required.
       security:
-        - jwt: []
-        - role: ['admin']
+        - bearerAuth: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
-        required: true
+              type: object
+              properties:
+                shoe_name:
+                  type: string
+                  example: "Air Max 95"
+                shoe_category:
+                  type: string
+                  example: "sneakers"
+                shoe_brand:
+                  type: string
+                  example: "Nike"
+                shoe_price:
+                  type: float
+                  example: 10.0
+                shoe_color:
+                  type: string
+                  example: "brown"
+                shoe_image:
+                  type: string
+                  example: "https://www.imgur.com/..."
       responses:
         '201':
           description: Product created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "20303dw.."
+                  shoe_image:
+                    type: string
+                    example: "https://images.puma.com/.."                  
+                  shoe_price:
+                    type: float
+                    example: 121
+                  created_at:
+                    type: string
+                    example: "2024-08-17T20:04:01.063292"
+                  shoe_brand:
+                    type: string
+                    example: "Puma"
+                  shoe_category:
+                    type: string
+                    example: "sneakers"
+                  shoe_color:
+                    type: string
+                    example: "yellow"
+                  shoe_name:
+                    type: string
+                    example: "Wild ..."
+                  updated_at:
+                    type: string
+                    example: "2024-08-17T20:04:01.063292"
         '400':
           description: Bad request or invalid data
           content:
@@ -584,8 +642,15 @@ paths:
     put:
       summary: Update a product
       description: Updates product details based on the provided ID. Admin access required.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the product to retrieve
       security:
-        - jwt: []
+        - bearerAuth: []
         - role: ['admin']
       requestBody:
         content:
@@ -593,18 +658,16 @@ paths:
             schema:
               type: object
               properties:
-                id:
+                shoe_name:
                   type: string
-                name:
+                shoe_category:
                   type: string
-                category:
+                shoe_brand:
                   type: string
-                brand:
-                  type: string
-                price:
+                shoe_price:
                   type: number
                   format: float
-                color:
+                shoe_color:
                   type: string
         required: true
       responses:
@@ -613,7 +676,35 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "20303dw.."
+                  shoe_image:
+                    type: string
+                    example: "https://images.puma.com/.."                  
+                  shoe_price:
+                    type: float
+                    example: 121
+                  created_at:
+                    type: string
+                    example: "2024-08-17T20:04:01.063292"
+                  shoe_brand:
+                    type: string
+                    example: "Puma"
+                  shoe_category:
+                    type: string
+                    example: "sneakers"
+                  shoe_color:
+                    type: string
+                    example: "yellow"
+                  shoe_name:
+                    type: string
+                    example: "Wild ..."
+                  updated_at:
+                    type: string
+                    example: "2024-08-17T20:04:01.063292"
         '404':
           description: Product not found
           content:
@@ -628,8 +719,15 @@ paths:
     delete:
       summary: Delete a product
       description: Deletes a product based on the provided ID. Admin access required.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the product to retrieve
       security:
-        - jwt: []
+        - bearerAuth: []
         - role: ['admin']
       responses:
         '200':
@@ -658,7 +756,7 @@ paths:
       summary: Get all users
       description: Returns a JSON format of all users. Admin access required.
       security:
-        - jwt: []
+        - bearerAuth: []
         - role: ['admin']
       responses:
         '200':
@@ -667,8 +765,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items:
-                  $ref: '#/components/schemas/User'
+                example: [{...}, {...}, ..., {...}]
         '404':
           description: No users available
           content:
@@ -684,6 +781,8 @@ paths:
     get:
       summary: Get a user profile by ID
       description: Returns user details based on the provided ID.
+      security:
+       - bearerAuth: []
       parameters:
         - in: path
           name: user_id
@@ -697,7 +796,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                type: string
+                example: "{...}"
         '404':
           description: User not found
           content:
@@ -713,20 +813,23 @@ paths:
       summary: Update a user profile
       description: Updates user details based on the provided ID.
       security:
-        - jwt: []
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+          description: The ID of the user to retrieve
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                id:
-                  type: string
-                name:
+                username:
                   type: string
                 email:
-                  type: string
-                role:
                   type: string
         required: true
       responses:
@@ -735,7 +838,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                type: object
+                example: {...}
         '404':
           description: User not found
           content:

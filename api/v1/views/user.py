@@ -17,7 +17,7 @@ def users():
     if not users:
         return jsonify({'message': 'No user was created'}), 404
     for user in users:
-        list_users.append(user.to_dict())
+        list_users.append(user.from_dict())
     return jsonify(list_users), 200
 
 @app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
@@ -26,7 +26,7 @@ def get_user_profile(user_id):
     user = storage.get(User, user_id)
     if not user:
         return jsonify({'message': 'User not found'}), 404
-    return jsonify(user.to_dict()), 200
+    return jsonify(user.from_dict()), 200
 
 @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
 @jwt_required()
@@ -42,5 +42,5 @@ def update_user_profile(user_id):
             setattr(user, key, value)
     
     storage.save()
-    return jsonify(user.to_dict()), 200
+    return jsonify(user.from_dict()), 200
 

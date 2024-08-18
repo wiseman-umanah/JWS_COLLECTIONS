@@ -16,7 +16,7 @@ def login_post():
     if not user or not user.check_password(password):
         return jsonify({'message': 'Invalid credentials'}), 401
     
-    access_token = create_access_token(identity={'email': email, 'role': user.role})
+    access_token = create_access_token(identity={'email': email, 'role': user.role, 'id': user.id})
     return jsonify({'token': access_token}), 200
 
 @app_views.route('/signup', methods=['POST'], strict_slashes=False)
