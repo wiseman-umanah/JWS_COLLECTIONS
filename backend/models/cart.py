@@ -42,3 +42,11 @@ class Cart(BaseModel):
     def calculate_total(self):
         """Calculate the total price of the cart"""
         return sum(item.total_price for item in self.items)
+
+    def to_dict(self):
+        """Convert Cart to a dictionary for JSON serialization"""
+        return {
+            'user_id': self.user_id,
+            'items': [item.to_dict() for item in self.items],
+            '__class__': self.__class__.__name__
+        }

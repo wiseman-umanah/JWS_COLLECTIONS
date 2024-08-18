@@ -46,3 +46,17 @@ class CartItem(BaseModel):
         
     def update_total_price(self):
         self.total_price = self.quantity * self.price
+
+    # def to_dict(self):
+    #     """Convert CartItem to a dictionary for JSON serialization"""
+    #     return {
+    #         'cart_id': self.cart_id,
+    #         'shoe_id': self.shoe_id,
+    #         'shoe_name': self.shoe_name,
+    #         'quantity': self.quantity,
+    #         'price': self.price,
+    #         'total_price': self.total_price,
+    #         'created_at': self.created_at,
+    #         'updated_at': self.updated_at,
+    #         '__class__': self.__class__.__name__
+    #     }
