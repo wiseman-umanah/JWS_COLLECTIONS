@@ -79,9 +79,11 @@ class FileStorage:
         return None
     
     def get_cart_by_userId(self, user_id):
-        """Returns cart object of a user"""
+        """Get cart by user ID"""
         for cart in self.all(Cart).values():
             if cart.user_id == user_id:
+                # Ensure items are CartItem instances
+                cart.items = [CartItem(**item) if isinstance(item, dict) else item for item in cart.items]
                 return cart
         return None
 
