@@ -80,10 +80,9 @@ class FileStorage:
     
     def get_cart_by_userId(self, user_id):
         """Returns cart object of a user"""
-        all_cls = self.all(Cart)
-        for value in all_cls.values():
-            if value.user_id == user_id:
-                return value
+        for cart in self.all(Cart).values():
+            if cart.user_id == user_id:
+                return cart
         return None
 
     def get(self, cls, id):

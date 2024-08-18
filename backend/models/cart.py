@@ -45,8 +45,10 @@ class Cart(BaseModel):
 
     def to_dict(self):
         """Convert Cart to a dictionary for JSON serialization"""
-        return {
+        dict_cart = super().to_dict()
+        dict_cart.update({
             'user_id': self.user_id,
-            'items': [item.to_dict() for item in self.items],
-            '__class__': self.__class__.__name__
-        }
+            'items': [item.to_dict() for item in self.items]
+        })
+        return dict_cart
+    
