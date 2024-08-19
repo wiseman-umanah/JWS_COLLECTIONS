@@ -20,8 +20,7 @@ class CartItem(BaseModel, Base):
         quantity = Column(Float, nullable=False)
         _price = Column(Float, nullable=False)
         _total_price = Column(Float, nullable=False)
-        order_id = Column(String(100), ForeignKey('orders.id'), nullable=True) 
-
+        order_id = Column(String(100), ForeignKey('orders.id'), nullable=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -87,7 +86,7 @@ class CartItem(BaseModel, Base):
             self._total_price = float(value)
         else:
             raise ValueError("Cart item price must be a non-negative number")
-        
+
     def update_total_price(self):
         """Updates total price based on quantity"""
         self.total_price = self.quantity * self.price

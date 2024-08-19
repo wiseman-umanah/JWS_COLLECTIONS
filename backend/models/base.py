@@ -16,11 +16,13 @@ if method == 'db':
 else:
     Base = object
 
+
 class BaseModel(Base if method == 'db' else object):
     """The Base model
 
     Args:
-        Base (sqlalchemy base(), optional): declarative base to inherit. Defaults to object.
+        Base (sqlalchemy base(), optional):
+            declarative base to inherit. Defaults to object.
     """
     if method == 'db':
         __abstract__ = True
@@ -58,7 +60,7 @@ class BaseModel(Base if method == 'db' else object):
         self.updated_at = datetime.utcnow()
         storage.new(self)
         storage.save()
-    
+
     def to_dict(self) -> dict:
         """Converts object to dict format"""
         dictionary = self.__dict__.copy()
@@ -69,7 +71,7 @@ class BaseModel(Base if method == 'db' else object):
             dictionary['updated_at'] = self.updated_at.strftime(time)
         del dictionary['_sa_instance_state']
         return dictionary
-    
+
     def delete(self):
         """Delete an instance from the storage"""
         from backend.models import storage

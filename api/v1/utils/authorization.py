@@ -6,6 +6,7 @@ from flask import jsonify
 from backend.models import storage
 from backend.models.user import User
 
+
 def role_required(role):
     """Checks user's role
 
@@ -21,6 +22,7 @@ def role_required(role):
             return fn(*args, **kwargs)
         return wrapper
     return decorator
+
 
 def get_current_user():
     """gets the current user's details

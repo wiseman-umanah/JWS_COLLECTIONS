@@ -14,6 +14,7 @@ classes = {"User": User, "Shoe": Shoe,
            "Cart": Cart, "CartItem": CartItem,
            "Order": Order}
 
+
 class FileStorage:
     """serializes instances to a JSON file & deserializes back to instances"""
 
@@ -72,7 +73,6 @@ class FileStorage:
         except KeyError as e:
             print(f"Missing class {e} in JSON data.")
 
-
     def delete(self, obj=None):
         """Deletes a data from file
 
@@ -102,7 +102,7 @@ class FileStorage:
             if value.email == email:
                 return value
         return None
-    
+
     def get_cart_by_userId(self, user_id):
         """Get cart by user ID
 
@@ -137,7 +137,6 @@ class FileStorage:
                 return value
         return None
 
-
     def count(self, cls=None):
         """Count the number of objects in storage
 
@@ -150,4 +149,3 @@ class FileStorage:
         if cls:
             return len(self.all(cls).values())
         return len(self.__objects)
-

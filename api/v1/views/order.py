@@ -29,6 +29,7 @@ def get_allOrders():
     except Exception:
         abort(500)
 
+
 @app_views.route('/orders/<id>', methods=['GET'], strict_slashes=False)
 def get_order_by_id(id):
     """Get order by id
@@ -46,6 +47,7 @@ def get_order_by_id(id):
         return jsonify(order_obj.to_dict()), 200
     except Exception:
         abort(500)
+
 
 @app_views.route('/checkout', methods=['POST'], strict_slashes=False)
 @jwt_required()

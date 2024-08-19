@@ -30,6 +30,7 @@ def get_allCarts():
     except Exception:
         abort(500)
 
+
 @app_views.route('/carts/<id>', methods=['GET'], strict_slashes=False)
 def get_cart_by_id(id: str):
     """Retrieves Cart based on id
@@ -48,6 +49,7 @@ def get_cart_by_id(id: str):
     except Exception:
         abort(500)
 
+
 @app_views.route('/cart', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_user_cart():
@@ -64,10 +66,11 @@ def get_user_cart():
         cart = storage.get_cart_by_userId(user.id)
         if not cart:
             return jsonify({'message': 'Cart is empty'}), 200
-        
+
         return jsonify(cart.to_dict()), 200
     except Exception:
         abort(500)
+
 
 @app_views.route('/cart/add', methods=['POST'], strict_slashes=False)
 @jwt_required()
@@ -86,28 +89,28 @@ def add_to_cart():
         user = get_current_user()
         if not user:
             return jsonify({'error': 'User not found'}), 404
-        
+
         data = request.get_json()
         shoe_id = data.get('shoe_id')
         quantity = data.get('quantity', 1)
-        
+
         # Retrieve the shoe
         shoe = storage.get(Shoe, shoe_id)
         if not shoe:
             return jsonify({'error': 'Shoe not found'}), 404
-        
+
         # Retrieve or create the cart
         cart = storage.get_cart_by_userId(user.id)
         if not cart:
             cart = Cart(user_id=user.id)
             storage.new(cart)
-        
+
         cart.add_item(shoe_name=shoe.shoe_name,
-                    shoe_id=shoe.id, quantity=quantity,
-                    price=shoe.shoe_price)
-        
+                      shoe_id=shoe.id, quantity=quantity,
+                      price=shoe.shoe_price)
+
         storage.save()
-        
+
         return jsonify({'message': 'Item added to cart successfully'}), 200
     except Exception:
         abort(500)

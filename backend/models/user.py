@@ -42,7 +42,7 @@ class User(BaseModel, Base):
     def password(self):
         """Retrieves the users password"""
         return self._password
-    
+
     @password.setter
     def password(self, value: str):
         """Set new password of user
@@ -51,7 +51,7 @@ class User(BaseModel, Base):
             value (str): the new password of user
         """
         self._password = generate_password_hash(value)
-    
+
     def check_password(self, password):
         """Validate user's password
 

@@ -26,11 +26,12 @@ def login():
 
         if not user or not user.check_password(password):
             return jsonify({'message': 'Invalid credentials'}), 401
-        
+
         access_token = create_access_token(identity={'email': email, 'role': user.role, 'id': user.id})
         return jsonify({'token': access_token}), 200
     except Exception:
         abort(500)
+
 
 @app_views.route('/signup', methods=['POST'], strict_slashes=False)
 def signup():
@@ -45,7 +46,7 @@ def signup():
     username = data.get('username')
     firstname = data.get('firstname')
     lastname = data.get('lastname')
-    
+
     if not email or not password or not username\
     or not firstname or not lastname:
         return jsonify({'message': 'Email, password, firstname, lastname and username are required'}), 400

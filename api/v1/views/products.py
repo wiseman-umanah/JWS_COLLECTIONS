@@ -34,7 +34,7 @@ def get_products():
                 'total_pages': 0,
                 'products': []
             }), 200
-        
+
         # Apply filtering
         if category:
             products = [product for product in products if product.shoe_category == category]
@@ -71,6 +71,7 @@ def get_products():
     except Exception:
         abort(500)
 
+
 @app_views.route('/products/<id>', methods=['GET'], strict_slashes=False)
 def get_productById(id):
     """Retrieve a product via id
@@ -88,6 +89,7 @@ def get_productById(id):
         return jsonify(shoe_obj.to_dict()), 200
     except Exception:
         abort(500)
+
 
 @app_views.route('/products', methods=['POST'], strict_slashes=False)
 @jwt_required()
@@ -107,7 +109,7 @@ def create_product():
     shoe_image = data.get('shoe_image')
 
     if not shoe_name or not shoe_price\
-        or not  shoe_brand or not shoe_category\
+        or not shoe_brand or not shoe_category\
             or not shoe_color or not shoe_image:
         return jsonify({'message': 'Shoe name, color, brand, category, image link and price are required'}), 400
     try:
@@ -121,6 +123,7 @@ def create_product():
         return jsonify(new_product.to_dict()), 201
     except Exception as e:
         return jsonify({'message': str(e)}), 400
+
 
 @app_views.route('/products/<id>', methods=['PUT'], strict_slashes=False)
 @jwt_required()
@@ -144,11 +147,12 @@ def update_product(id):
         for key, value in data.items():
             if hasattr(product, key) and key not in ['id', 'created_at', 'updated_at']:
                 setattr(product, key, value)
-        
+
         storage.save()
         return jsonify(product.to_dict()), 200
     except Exception:
         abort(500)
+
 
 @app_views.route('/products/<id>', methods=['DELETE'], strict_slashes=False)
 @jwt_required()
@@ -166,7 +170,7 @@ def delete_product(id):
     try:
         if not product:
             return jsonify({'message': 'Product not found'}), 404
-        
+
         storage.delete(product)
         storage.save()
         return jsonify({'message': 'Product deleted successfully'}), 200

@@ -23,7 +23,7 @@ class Order(BaseModel, Base):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         if method != 'db':
             self.user_id = ""
             self.items = []  # List of CartItems
@@ -52,7 +52,7 @@ class Order(BaseModel, Base):
             value (str): the status to change
         """
         self._status = value
-            
+
     def calculate_total(self):
         """Calculate the total price of the order."""
         self.total_price = sum(item.total_price for item in self.items)
