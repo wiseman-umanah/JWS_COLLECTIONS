@@ -3,7 +3,7 @@
 from api.v1.views import app_views
 from backend.models import storage
 from backend.models.shoe import Shoe
-from flask import jsonify, request
+from flask import jsonify, request, abort
 from flask_jwt_extended import jwt_required
 from api.v1.utils.authorization import role_required
 
@@ -23,50 +23,53 @@ def get_products():
     max_price = request.args.get('max_price', type=float)
     color = request.args.get('color')
 
-    products = list(storage.all(Shoe).values())
+    try:
+        products = list(storage.all(Shoe).values())
 
-    if not products:
-        return jsonify({
+        if not products:
+            return jsonify({
+                'page': page,
+                'per_page': per_page,
+                'total_products': 0,
+                'total_pages': 0,
+                'products': []
+            }), 200
+        
+        # Apply filtering
+        if category:
+            products = [product for product in products if product.shoe_category == category]
+            print(products)
+        if brand:
+            products = [product for product in products if product.shoe_brand == brand]
+        if min_price is not None:
+            products = [product for product in products if product.shoe_price >= min_price]
+        if max_price is not None:
+            products = [product for product in products if product.shoe_price <= max_price]
+        if color:
+            products = [product for product in products if product.shoe_color == color]
+
+        # Calculate total pages ( page details )
+        total_products = len(products)
+        total_pages = (total_products + per_page - 1) // per_page
+
+        # Paginate products
+        start = (page - 1) * per_page
+        end = start + per_page
+        paginated_products = products[start:end]
+
+        if start >= total_products:
+            paginated_products = []
+
+        response = {
             'page': page,
             'per_page': per_page,
-            'total_products': 0,
-            'total_pages': 0,
-            'products': []
-        }), 200
-    
-    # Apply filtering
-    if category:
-        products = [product for product in products if product.shoe_category == category]
-        print(products)
-    if brand:
-        products = [product for product in products if product.shoe_brand == brand]
-    if min_price is not None:
-        products = [product for product in products if product.shoe_price >= min_price]
-    if max_price is not None:
-        products = [product for product in products if product.shoe_price <= max_price]
-    if color:
-        products = [product for product in products if product.shoe_color == color]
-
-    # Calculate total pages ( page details )
-    total_products = len(products)
-    total_pages = (total_products + per_page - 1) // per_page
-
-    # Paginate products
-    start = (page - 1) * per_page
-    end = start + per_page
-    paginated_products = products[start:end]
-
-    if start >= total_products:
-        paginated_products = []
-
-    response = {
-        'page': page,
-        'per_page': per_page,
-        'total_products': total_products,
-        'total_pages': total_pages,
-        'products': [prods.to_dict() for prods in paginated_products]
-    }
-    return jsonify(response), 200
+            'total_products': total_products,
+            'total_pages': total_pages,
+            'products': [prods.to_dict() for prods in paginated_products]
+        }
+        return jsonify(response), 200
+    except Exception:
+        abort(500)
 
 @app_views.route('/products/<id>', methods=['GET'], strict_slashes=False)
 def get_productById(id):
@@ -78,10 +81,13 @@ def get_productById(id):
     Returns:
         json (dict): dictionary repr of the product
     """
-    shoe_obj = storage.get(Shoe, id)
-    if not shoe_obj:
-        return jsonify({'error': 'Product not found'}), 404
-    return jsonify(shoe_obj.to_dict()), 200
+    try:
+        shoe_obj = storage.get(Shoe, id)
+        if not shoe_obj:
+            return jsonify({'error': 'Product not found'}), 404
+        return jsonify(shoe_obj.to_dict()), 200
+    except Exception:
+        abort(500)
 
 @app_views.route('/products', methods=['POST'], strict_slashes=False)
 @jwt_required()
@@ -130,16 +136,19 @@ def update_product(id):
     """
     data = request.get_json()
     product = storage.get(Shoe, id)
-    if not product:
-        return jsonify({'message': 'Product not found'}), 404
+    try:
+        if not product:
+            return jsonify({'message': 'Product not found'}), 404
 
-    # Update product fields
-    for key, value in data.items():
-        if hasattr(product, key) and key not in ['id', 'created_at', 'updated_at']:
-            setattr(product, key, value)
-    
-    storage.save()
-    return jsonify(product.to_dict()), 200
+        # Update product fields
+        for key, value in data.items():
+            if hasattr(product, key) and key not in ['id', 'created_at', 'updated_at']:
+                setattr(product, key, value)
+        
+        storage.save()
+        return jsonify(product.to_dict()), 200
+    except Exception:
+        abort(500)
 
 @app_views.route('/products/<id>', methods=['DELETE'], strict_slashes=False)
 @jwt_required()
@@ -154,9 +163,12 @@ def delete_product(id):
         json (dict): successful or failure
     """
     product = storage.get(Shoe, id)
-    if not product:
-        return jsonify({'message': 'Product not found'}), 404
-    
-    storage.delete(product)
-    storage.save()
-    return jsonify({'message': 'Product deleted successfully'}), 200
+    try:
+        if not product:
+            return jsonify({'message': 'Product not found'}), 404
+        
+        storage.delete(product)
+        storage.save()
+        return jsonify({'message': 'Product deleted successfully'}), 200
+    except Exception:
+        abort(500)
