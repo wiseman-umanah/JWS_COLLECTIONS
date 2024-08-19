@@ -4,3 +4,4 @@ test.py
 .env
 database_backup.json
 ca.pem
+venv
