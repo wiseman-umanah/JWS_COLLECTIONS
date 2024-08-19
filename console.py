@@ -40,14 +40,17 @@ class JWS(cmd.Cmd):
         if len(args) > 1:
             print("Error: Available Models: {User, Shoe}")
         if args[0] in classes:
-            obj = classes[args[0]]()
-            data = obj.to_dict()
+            temp = {}
+            obj = classes[args[0]]
+            data = obj().to_dict()
             for i in data:
                 if i not in exclude:
                     value = input(f'{i} ?: ')
-                    setattr(obj, i, value)
+                    temp[i] = value
+            obj = obj(**temp)
             obj.save()
             print(obj.id)
+            print('done')
         else:
             print("** class doesn't exist **")
             return False

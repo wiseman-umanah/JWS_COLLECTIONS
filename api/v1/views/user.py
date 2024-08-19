@@ -16,8 +16,7 @@ def users():
     users = storage.all(User).values()
     if not users:
         return jsonify({'message': 'No user was created'}), 404
-    for user in users:
-        list_users.append(user.from_dict())
+    list_users = [user.from_dict() for user in users]
     return jsonify(list_users), 200
 
 @app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
@@ -38,7 +37,7 @@ def update_user_profile(user_id):
     
     # Update user fields
     for key, value in data.items():
-        if hasattr(user, key):
+        if hasattr(user, key) and key not in ['id', 'created_at', 'updated_at']:
             setattr(user, key, value)
     
     storage.save()

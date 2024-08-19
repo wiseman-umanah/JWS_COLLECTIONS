@@ -11,6 +11,10 @@ def login_post():
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
+
+    if not email or not password:
+        return jsonify({'message': 'Email and password are required'}), 400
+
     user = storage.get_user_by_email(email)
 
     if not user or not user.check_password(password):
@@ -28,8 +32,11 @@ def signup_post():
     username = data.get('username')
     firstname = data.get('firstname')
     lastname = data.get('lastname')
-    phoneNumber = data.get('phoneNumber')
     
+    if not email or not password or not username\
+    or not firstname or not lastname:
+        return jsonify({'message': 'Email, password, firstname, lastname and username are required'}), 400
+
     if storage.get_user_by_email(email=email):
         return jsonify({'message': 'Email address already exists'}), 400
 
@@ -37,8 +44,7 @@ def signup_post():
         new_user = User(
             email=email, password=password,
             username=username, firstname=firstname,
-            lastname=lastname, phoneNumber=phoneNumber
-            )
+            lastname=lastname)
         storage.new(new_user)
         storage.save()
         return jsonify({'message': 'User created successfully'}), 201

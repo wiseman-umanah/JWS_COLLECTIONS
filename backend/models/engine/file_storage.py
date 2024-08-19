@@ -49,8 +49,12 @@ class FileStorage:
         try:
             with open(self.__file_path, 'r') as f:
                 jo = json.load(f)
-            for key in jo:
-                self.__objects[key] = classes[jo[key]["__class__"]](**jo[key])
+            for key, value in jo.items():
+                cls = classes.get(value["__class__"])
+            if cls:
+                self.__objects[key] = cls(**value)
+            else:
+                print(f"Class {value['__class__']} not found.")
         except FileNotFoundError:
             print("File not found. Starting with an empty storage.")
         except json.JSONDecodeError:

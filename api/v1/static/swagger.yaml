@@ -151,10 +151,42 @@ paths:
             application/json:
               schema:
                 type: array
-                items:
-                  type: object
-                user_id:
-                  type: string
+                properties:
+                  items:
+                    type: object
+                    properties:
+                      __class__:
+                        type: string
+                        example: CartItem
+                      _price:
+                        type: integer
+                        example: 170
+                      _total_price:
+                        type: integer
+                        example: 340
+                      cart_id:
+                        type: string
+                        example: "1ba4dc40-53d1-43e8-93e3-c84bc2a3f900"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2024-08-18T01:57:19.023586"
+                      id:
+                        type: string
+                        example: "5afdf879-e87d-4ea4-acdc-865d2328e136"
+                      quantity:
+                        type: integer
+                        example: 2
+                      shoe_id:
+                        type: string
+                        example: "57e66b76-35a9-4435-a8fc-a1d16fe971e0"
+                      shoe_name:
+                        type: string
+                        example: Air Jordan 1 Utility
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: "2024-08-18T01:57:19.023586"
         '401':
           description: Unauthorized
           content:
@@ -195,7 +227,40 @@ paths:
                 type: object
                 properties:
                   items:
-                    type: array
+                    type: object
+                    properties:
+                      __class__:
+                        type: string
+                        example: CartItem
+                      _price:
+                        type: integer
+                        example: 170
+                      _total_price:
+                        type: integer
+                        example: 340
+                      cart_id:
+                        type: string
+                        example: "1ba4dc40-53d1-43e8-93e3-c84bc2a3f900"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2024-08-18T01:57:19.023586"
+                      id:
+                        type: string
+                        example: "5afdf879-e87d-4ea4-acdc-865d2328e136"
+                      quantity:
+                        type: integer
+                        example: 2
+                      shoe_id:
+                        type: string
+                        example: "57e66b76-35a9-4435-a8fc-a1d16fe971e0"
+                      shoe_name:
+                        type: string
+                        example: Air Jordan 1 Utility
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: "2024-08-18T01:57:19.023586"
                   user_id:
                     type: string
         '404':

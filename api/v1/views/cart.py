@@ -68,29 +68,9 @@ def add_to_cart():
         cart = Cart(user_id=user.id)
         storage.new(cart)
     
-    # Check if the item already exists in the cart
-    item = None
-    for cart_item in cart.items:
-        if cart_item.shoe_id == shoe.id:
-            item = cart_item
-            break
-    
-    if item:
-        # Update existing item quantity and total price
-        item.quantity += quantity
-        item.total_price = item.quantity * shoe.shoe_price
-    else:
-        # Create new cart item
-        item = CartItem(
-            cart_id=cart.id,
-            shoe_id=shoe.id,
-            shoe_name=shoe.shoe_name,
-            quantity=quantity,
-            price=shoe.shoe_price,
-            total_price=quantity * shoe.shoe_price
-        )
-        cart.items.append(item)
-        storage.new(item)
+    cart.add_item(shoe_name=shoe.shoe_name,
+                  shoe_id=shoe.id, quantity=quantity,
+                  price=shoe.shoe_price)
     
     storage.save()
     

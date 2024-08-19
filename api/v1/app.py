@@ -10,36 +10,44 @@ import os
 
 load_dotenv()
 
-
 app = Flask(__name__)
 
+# Ensure the secret key is fetched from the environment
 app.config['JWT_SECRET_KEY'] = os.getenv('SECRET_KEY')
+
 jwt = JWTManager(app)
 
+# Register blueprints
 app.register_blueprint(app_views)
 
+# Configure CORS
 cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
-
+# Setup Swagger
 SWAGGER_URL = '/swagger'
 API_URL = '/static/swagger.yaml'
 
 swaggerui_blueprint = get_swaggerui_blueprint(
-	SWAGGER_URL,
-	API_URL,
-	config={
-		'app_name': 'JWS Collections APi'
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': 'JWS Collections API'
     }
 )
 
 app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
-
+# Error handlers
 @app.errorhandler(404)
 def not_found(error):
-	"""catches any 404 error"""
-	return make_response(jsonify({'error': 'Not found'}), 404)
+    """Catches any 404 error"""
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
+# Consider adding more error handlers for better error reporting
+@app.errorhandler(500)
+def internal_error(error):
+    """Catches any 500 error"""
+    return make_response(jsonify({'error': 'Internal Server Error'}), 500)
 
 if __name__ == "__main__":
-	app.run(host="0.0.0.0", port="5000", threaded=True, debug=True)
+    app.run(host="0.0.0.0", port=5000, threaded=True, debug=True)

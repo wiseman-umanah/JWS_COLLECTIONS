@@ -32,6 +32,7 @@ def get_products():
     # Apply filtering
     if category:
         products = [product for product in products if product.shoe_category == category]
+        print(products)
     if brand:
         products = [product for product in products if product.shoe_brand == brand]
     if min_price is not None:
@@ -60,7 +61,6 @@ def get_products():
         'total_pages': total_pages,
         'products': [prods.to_dict() for prods in paginated_products]
     }
-    
     return jsonify(response), 200
 
 @app_views.route('/products/<id>', methods=['GET'], strict_slashes=False)
@@ -82,6 +82,11 @@ def create_product():
     shoe_price = data.get('shoe_price')
     shoe_color = data.get('shoe_color')
     shoe_image = data.get('shoe_image')
+
+    if not shoe_name or not shoe_price\
+        or not  shoe_brand or not shoe_category\
+            or not shoe_color or not shoe_image:
+        return jsonify({'message': 'Shoe name, color, brand, category, image link and price are required'}), 400
     try:
         new_product = Shoe(
             shoe_name=shoe_name, shoe_category=shoe_category,
@@ -105,7 +110,7 @@ def update_product(id):
 
     # Update product fields
     for key, value in data.items():
-        if hasattr(product, key):
+        if hasattr(product, key) and key not in ['id', 'created_at', 'updated_at']:
             setattr(product, key, value)
     
     storage.save()

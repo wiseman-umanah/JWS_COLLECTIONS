@@ -50,9 +50,6 @@ def checkout():
     order.status = "completed"
     storage.new(order)
 
-    # Clear the user's cart
-    storage.delete(cart)
-
     # Save changes to storage
     storage.save()
 

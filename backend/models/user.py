@@ -1,19 +1,28 @@
-from backend.models.base import BaseModel
-from hashlib import md5
+from backend.models.base import BaseModel, Base
 import re
 from werkzeug.security import generate_password_hash, check_password_hash
+from backend.models import method
+from sqlalchemy import Column, String
 
+class User(BaseModel, Base):
+    if method == 'db':
+        __tablename__ = 'users'
+        username = Column(String(128), nullable=False)
+        firstname = Column(String(128), nullable=False)
+        lastname = Column(String(128), nullable=False)
+        _password = Column('password', String(1024), nullable=False)
+        _email = Column('email', String(128), nullable=False)
+        role = Column(String(128), nullable=False, default='user')
 
-class User(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.username = ""
-        self.firstname = ""
-        self.lastname = ""
-        self._password = ""
-        self._email = ""
-        self.phoneNumber = ""
-        self.role = "user"
+        if method != 'db':
+            self.username = ""
+            self.firstname = ""
+            self.lastname = ""
+            self._password = ""
+            self._email = ""
+            self.role = "user"
 
         if kwargs:
             for key, value in kwargs.items():

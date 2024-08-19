@@ -1,13 +1,25 @@
-from backend.models.base import BaseModel
+from backend.models.base import BaseModel, Base
+from sqlalchemy import Column, String, Float, ForeignKey
+from sqlalchemy.orm import relationship
+from backend.models import method
+from backend.models.cartitem import CartItem
 
-class Order(BaseModel):
+class Order(BaseModel, Base):
+    if method == 'db':
+        __tablename__ = 'orders'
+        user_id = Column(String(100), ForeignKey('users.id'), nullable=False)
+        total_price = Column(Float, nullable=False, default=0.0)
+        _status = Column(String(50), nullable=False, default="pending")
+        items = relationship('CartItem', backref='order', cascade='all, delete-orphan')
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        self.user_id = ""
-        self.items = []  # List of CartItems
-        self.total_price = 0.0
-        self._status = "pending"
+        if method != 'db':
+            self.user_id = ""
+            self.items = []  # List of CartItems
+            self.total_price = 0.0
+            self._status = "pending"
 
         if kwargs:
             for key, value in kwargs.items():
@@ -29,13 +41,12 @@ class Order(BaseModel):
         self.total_price = sum(item.total_price for item in self.items)
 
     def to_dict(self):
-        """Convert Cart to a dictionary for JSON serialization"""
-        dict_cart = super().to_dict()
-        dict_cart.update({
+        """Convert Order to a dictionary for JSON serialization"""
+        dict_order = super().to_dict()
+        dict_order.update({
             'user_id': self.user_id,
-            'items': [item.to_dict() for item in self.items],
+            'items': [item.to_dict() for item in self.items if isinstance(item, CartItem)],
             'total_price': self.total_price,
             'status': self.status
         })
-        return dict_cart
-    
+        return dict_order
