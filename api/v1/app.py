@@ -40,14 +40,29 @@ app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 # Error handlers
 @app.errorhandler(404)
 def not_found(error):
-    """Catches any 404 error"""
+    """Handle 404 error
+
+    Args:
+        error (str): The error message
+
+    Returns:
+        json: Not found
+    """
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 # Consider adding more error handlers for better error reporting
 @app.errorhandler(500)
 def internal_error(error):
-    """Catches any 500 error"""
+    """Handle 500 error
+
+    Args:
+        error (str): The error message
+
+    Returns:
+        json: Internal Server Error
+    """
     return make_response(jsonify({'error': 'Internal Server Error'}), 500)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, threaded=True, debug=True)

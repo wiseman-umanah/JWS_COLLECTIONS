@@ -2,7 +2,6 @@
 """
 Contains the FileStorage class
 """
-
 import json
 from backend.models.shoe import Shoe
 from backend.models.user import User
@@ -24,7 +23,14 @@ class FileStorage:
     __objects = {}
 
     def all(self, cls=None):
-        """returns the dictionary __objects"""
+        """Retrieves all data from file or based on cls
+
+        Args:
+            cls (object, optional): the class model. Defaults to None.
+
+        Returns:
+            dict: the objects that have been retrieved
+        """
         if cls:
             if isinstance(cls, str):
                 cls = classes.get(cls)
@@ -33,7 +39,11 @@ class FileStorage:
         return self.__objects
 
     def new(self, obj):
-        """sets in __objects the obj with key <obj class name>.id"""
+        """Adds an object to file
+
+        Args:
+            obj (object): the object to add
+        """
         if obj is not None:
             key = obj.__class__.__name__ + "." + obj.id
             self.__objects[key] = obj
@@ -64,7 +74,11 @@ class FileStorage:
 
 
     def delete(self, obj=None):
-        """delete obj from __object if it’s inside"""
+        """Deletes a data from file
+
+        Args:
+            obj (object, optional): the object to delete. Defaults to None.
+        """
         if obj is not None:
             key = obj.__class__.__name__ + '.' + obj.id
             if key in self.__objects:
@@ -75,7 +89,14 @@ class FileStorage:
         self.reload()
 
     def get_user_by_email(self, email):
-        """Returns the user object based on email"""
+        """Retrieves user based on email
+
+        Args:
+            email (str): the email of the user
+
+        Returns:
+            object: the user object
+        """
         all_cls = self.all(User)
         for value in all_cls.values():
             if value.email == email:
@@ -83,7 +104,14 @@ class FileStorage:
         return None
     
     def get_cart_by_userId(self, user_id):
-        """Get cart by user ID"""
+        """Get cart by user ID
+
+        Args:
+            user_id (str): the id of the user
+
+        Returns:
+            object: the cart associated with the user
+        """
         for cart in self.all(Cart).values():
             if cart.user_id == user_id:
                 # Ensure items are CartItem instances
@@ -92,7 +120,15 @@ class FileStorage:
         return None
 
     def get(self, cls, id):
-        """Returns the object based on class name and ID"""
+        """Returns the object based on class name and ID
+
+        Args:
+            cls (object): The object class
+            id (str): id of the object
+
+        Returns:
+            object: the object to retrieve | None
+        """
         if cls not in classes.values():
             return None
         all_cls = self.all(cls)
@@ -103,7 +139,14 @@ class FileStorage:
 
 
     def count(self, cls=None):
-        """Count the number of objects in storage"""
+        """Count the number of objects in storage
+
+        Args:
+            cls (object, optional): the class of the model. Defaults to None.
+
+        Returns:
+            int: the count of the objects
+        """
         if cls:
             return len(self.all(cls).values())
         return len(self.__objects)

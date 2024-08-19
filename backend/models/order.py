@@ -1,10 +1,19 @@
+#!/usr/bin/python3
+"""Order model for handling orders"""
 from backend.models.base import BaseModel, Base
 from sqlalchemy import Column, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from backend.models import method
 from backend.models.cartitem import CartItem
 
+
 class Order(BaseModel, Base):
+    """Order model
+
+    Args:
+        BaseModel (class): the base model of class
+        Base (declarative base): the table model
+    """
     if method == 'db':
         __tablename__ = 'orders'
         user_id = Column(String(100), ForeignKey('users.id'), nullable=False)
@@ -28,12 +37,20 @@ class Order(BaseModel, Base):
 
     @property
     def status(self) -> str:
-        """order status"""
+        """order status
+
+        Returns:
+            str: current status
+        """
         return self._status
 
     @status.setter
     def status(self, value: str):
-        """Update order status"""
+        """Update order status
+
+        Args:
+            value (str): the status to change
+        """
         self._status = value
             
     def calculate_total(self):

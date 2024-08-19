@@ -1,13 +1,19 @@
 #!/usr/bin/python3
+"""Module handles all authentications"""
 from api.v1.views import app_views
 from backend.models.user import User
 from backend.models import storage
 from flask import jsonify, request
 from flask_jwt_extended import create_access_token, jwt_required
 
+
 @app_views.route('/login', methods=['POST'], strict_slashes=False)
-def login_post():
-    """Handles user login and issues JWT tokens."""
+def login():
+    """Tries to log in user
+
+    Returns:
+        json: returns a json format with the token
+    """
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
@@ -24,8 +30,12 @@ def login_post():
     return jsonify({'token': access_token}), 200
 
 @app_views.route('/signup', methods=['POST'], strict_slashes=False)
-def signup_post():
-    """Handles user registration."""
+def signup():
+    """Signs up a new user
+
+    Returns:
+        json: message with status if successfully or failed
+    """
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
@@ -50,9 +60,3 @@ def signup_post():
         return jsonify({'message': 'User created successfully'}), 201
     except Exception as e:
         return jsonify({'message': str(e)}), 500
-
-@app_views.route('/logout', methods=['POST'], strict_slashes=False)
-@jwt_required()
-def logout():
-    """Handles user logout."""
-    return jsonify({'message': 'User logged out'}), 200

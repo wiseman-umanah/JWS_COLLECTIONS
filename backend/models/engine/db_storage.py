@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+"""Database Storage Engine"""
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from backend.models.base import Base
@@ -9,9 +11,12 @@ from backend.models.order import Order
 from os import getenv
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
-classes = {"User": User, "Shoe": Shoe, "Cart": Cart, "CartItem": CartItem, "Order": Order}
+classes = {"User": User, "Shoe": Shoe,
+           "Cart": Cart, "CartItem": CartItem,
+           "Order": Order}
 
 
 class DBStorage:
@@ -42,7 +47,14 @@ class DBStorage:
         Base.metadata.create_all(self.__engine)
 
     def all(self, cls=None):
-        """Query on the current database session"""
+        """Retrieves all data from db or based on cls
+
+        Args:
+            cls (object, optional): the class model. Defaults to None.
+
+        Returns:
+            dict: the objects that have been retrieved
+        """
         if cls:
             if isinstance(cls, str):
                 cls = classes.get(cls)
@@ -54,7 +66,11 @@ class DBStorage:
             return all_objects
 
     def new(self, obj):
-        """Add the object to the current database session"""
+        """Adds an object to db
+
+        Args:
+            obj (object): the object to add
+        """
         self.__session.add(obj)
 
     def save(self):
@@ -67,7 +83,11 @@ class DBStorage:
         self.__session = scoped_session(sessionmaker(bind=self.__engine, expire_on_commit=False))
 
     def delete(self, obj=None):
-        """Delete obj from the current database session"""
+        """Deletes a data from database
+
+        Args:
+            obj (object, optional): the object to delete. Defaults to None.
+        """
         if obj:
             self.__session.delete(obj)
             self.save()
@@ -77,24 +97,53 @@ class DBStorage:
         self.__session.remove()
 
     def get_user_by_email(self, email):
-        """Returns the user object based on email"""
+        """Retrieves user based on email
+
+        Args:
+            email (str): the email of the user
+
+        Returns:
+            object: the user object
+        """
         return self.__session.query(User).filter_by(_email=email).first()
 
     def get_cart_by_userId(self, user_id):
-        """Get cart by user ID"""
+        """Get cart by user ID
+
+        Args:
+            user_id (str): the id of the user
+
+        Returns:
+            object: the cart associated with the user
+        """
         cart = self.__session.query(Cart).filter_by(user_id=user_id).first()
         if cart:
             cart.items = [CartItem(**item.to_dict()) if isinstance(item, dict) else item for item in cart.items]
         return cart
 
     def get(self, cls, id):
-        """Returns the object based on class name and ID"""
+        """Returns the object based on class name and ID
+
+        Args:
+            cls (object): The object class
+            id (str): id of the object
+
+        Returns:
+            object: the object to retrieve | None
+        """
         if cls in classes.values():
             return self.__session.query(cls).filter_by(id=id).first()
         return None
 
     def count(self, cls=None):
-        """Count the number of objects in storage"""
+        """Count the number of objects in storage
+
+        Args:
+            cls (object, optional): the class of the model. Defaults to None.
+
+        Returns:
+            int: the count of the objects
+        """
         if cls:
             return self.__session.query(cls).count()
         else:

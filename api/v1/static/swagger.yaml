@@ -77,9 +77,6 @@ paths:
                 lastname:
                   type: string
                   example: "Dylan"
-                phoneNumber:
-                  type: string
-                  example: "08028392192"
       responses:
         '201':
           description: User created successfully
@@ -111,33 +108,6 @@ paths:
                   message:
                     type: string
                     example: "Error Message Expected"
-  /logout:
-    post:
-      summary: User logout
-      description: Handles user logout.
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Successful logout
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "User logged out"
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Invalid or missing token"
   /carts:
     get:
       summary: Get all carts

@@ -17,6 +17,11 @@ else:
     Base = object
 
 class BaseModel(Base if method == 'db' else object):
+    """The Base model
+
+    Args:
+        Base (sqlalchemy base(), optional): declarative base to inherit. Defaults to object.
+    """
     if method == 'db':
         __abstract__ = True
         id = Column(String(100), primary_key=True, default=lambda: str(uuid.uuid4()))

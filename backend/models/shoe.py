@@ -10,6 +10,7 @@ class Shoe(BaseModel, Base):
     
     Args:
         BaseModel (class): base model for classes
+        Base (declarative base): the table model
     """
     if method == 'db':
         __tablename__ = 'shoes'
@@ -44,7 +45,14 @@ class Shoe(BaseModel, Base):
 
     @shoe_price.setter
     def shoe_price(self, value: float):
-        """Update price of a shoe"""
+        """Update price of a shoe
+
+        Args:
+            value (float): the new shoe price
+
+        Raises:
+            ValueError: price must not be < 0
+        """
         if isinstance(value, (int, float)) and value >= 0:
             self._shoe_price = float(value)
         else:
@@ -57,7 +65,14 @@ class Shoe(BaseModel, Base):
 
     @shoe_image.setter
     def shoe_image(self, value: str):
-        """Set path to image"""
+        """Sets image path
+
+        Args:
+            value (str): the image path
+
+        Raises:
+            ValueError: shoe must be a valid path
+        """
         if isinstance(value, str) and value.startswith(("http://", "https://", "/")):
             self._shoe_image = value
         else:

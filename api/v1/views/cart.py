@@ -1,20 +1,24 @@
 #!/usr/bin/python3
-
+"""Route to handle cart"""
 from flask_jwt_extended import jwt_required
 from api.v1.views import app_views
 from api.v1.utils.authorization import role_required
 from backend.models import storage
 from backend.models.cart import Cart
-from backend.models.cartitem import CartItem
 from backend.models.shoe import Shoe
 from flask import jsonify, request
 from api.v1.utils.authorization import get_current_user
+
 
 @app_views.route('/carts', methods=['GET'], strict_slashes=False)
 @jwt_required()
 @role_required('admin')
 def get_allCarts():
-    """Returns JSON format of all carts"""
+    """Retrieves all carts of users
+
+    Returns:
+        json (list): A list containing all carts
+    """
     list_carts = []
     carts = storage.all(Cart).values()
     if not carts:
@@ -24,8 +28,15 @@ def get_allCarts():
     return jsonify(list_carts), 200
 
 @app_views.route('/carts/<id>', methods=['GET'], strict_slashes=False)
-def get_cart_by_id(id):
-    """Returns product based on id"""
+def get_cart_by_id(id: str):
+    """Retrieves Cart based on id
+
+    Args:
+        id (str): the cart's id
+
+    Returns:
+        json(dict): json dictionary repr of the Cart
+    """
     cart_obj = storage.get(Cart, id)
     if not cart_obj:
         return jsonify({'error': 'Cart not found'}), 404
@@ -34,7 +45,11 @@ def get_cart_by_id(id):
 @app_views.route('/cart', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_user_cart():
-    """Retrieve the current user's cart"""
+    """Retrieves current user cart
+
+    Returns:
+        json(dict): json dictionary repr of the Cart
+    """
     user = get_current_user()
     if not user:
         return jsonify({'error': 'User not found'}), 404
@@ -48,7 +63,16 @@ def get_user_cart():
 @app_views.route('/cart/add', methods=['POST'], strict_slashes=False)
 @jwt_required()
 def add_to_cart():
-    """Add an item to the current user's cart"""
+    """Adds an item to cart
+
+    {
+       shoe_id: 283928-238-dw939
+       quantity: 2
+    }
+
+    Returns:
+        json: success | failed
+    """
     user = get_current_user()
     if not user:
         return jsonify({'error': 'User not found'}), 404

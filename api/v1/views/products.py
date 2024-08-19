@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""Routes for products (Shoe)"""
 from api.v1.views import app_views
 from backend.models import storage
 from backend.models.shoe import Shoe
@@ -9,7 +10,11 @@ from api.v1.utils.authorization import role_required
 
 @app_views.route('/products', methods=['GET'], strict_slashes=False)
 def get_products():
-    """Returns JSON format of all products"""
+    """Retrieves all products
+
+    Returns:
+        json (list): List of all products (Shoe)
+    """
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
     category = request.args.get('category')
@@ -65,7 +70,14 @@ def get_products():
 
 @app_views.route('/products/<id>', methods=['GET'], strict_slashes=False)
 def get_productById(id):
-    """Returns product based on id"""
+    """Retrieve a product via id
+
+    Args:
+        id (str): the id of the product
+
+    Returns:
+        json (dict): dictionary repr of the product
+    """
     shoe_obj = storage.get(Shoe, id)
     if not shoe_obj:
         return jsonify({'error': 'Product not found'}), 404
@@ -75,6 +87,11 @@ def get_productById(id):
 @jwt_required()
 @role_required('admin')
 def create_product():
+    """Admin creation of new product
+
+    Returns:
+        json (dict): dictionary repr of the product
+    """
     data = request.get_json()
     shoe_name = data.get('shoe_name')
     shoe_category = data.get('shoe_category')
@@ -103,6 +120,14 @@ def create_product():
 @jwt_required()
 @role_required('admin')
 def update_product(id):
+    """updates a product, restricted to admin
+
+    Args:
+        id (str): id of the product
+
+    Returns:
+        json (dict): dictionary repr of the product
+    """
     data = request.get_json()
     product = storage.get(Shoe, id)
     if not product:
@@ -120,6 +145,14 @@ def update_product(id):
 @jwt_required()
 @role_required('admin')
 def delete_product(id):
+    """Deleting product restricted to admin
+
+    Args:
+        id (str): id of the product
+
+    Returns:
+        json (dict): successful or failure
+    """
     product = storage.get(Shoe, id)
     if not product:
         return jsonify({'message': 'Product not found'}), 404

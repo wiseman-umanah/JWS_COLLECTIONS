@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""Cart Model to handle cart of users"""
 from backend.models.base import BaseModel, Base
 from backend.models.cartitem import CartItem
 from sqlalchemy import Column, String, ForeignKey
@@ -7,6 +8,12 @@ from backend.models import method
 
 
 class Cart(BaseModel, Base):
+    """Cart Model of users
+
+    Args:
+        BaseModel (Class): The Basemodel
+        Base (declarative_base): the table model
+    """
     if method == 'db':
         __tablename__ = 'carts'
         user_id = Column(String(100), ForeignKey('users.id'), nullable=False)
@@ -23,8 +30,15 @@ class Cart(BaseModel, Base):
                 if key != "__class__":
                     setattr(self, key, value)
 
-    def add_item(self, shoe_name, shoe_id, quantity, price):
-        """Add an item to the cart or update quantity if it already exists"""
+    def add_item(self, shoe_name: str, shoe_id: str, quantity: int, price: float):
+        """Add an item to the cart or update quantity if it already exists
+
+        Args:
+            shoe_name (str): the shoe name to add to cart
+            shoe_id (str): the shoe id to add
+            quantity (int): quantity to add
+            price (float): the price of the product(shoe)
+        """
         item = next((i for i in self.items if i.shoe_id == shoe_id), None)
         if item:
             item.quantity += quantity
@@ -36,15 +50,24 @@ class Cart(BaseModel, Base):
                 price=price, total_price=quantity * price)
             self.items.append(new_item)
 
-    def update_quantity(self, shoe_id, quantity):
-        """Update the quantity of an item in the cart"""
+    def update_quantity(self, shoe_id: str, quantity: int):
+        """Update the quantity of an item in the cart
+
+        Args:
+            shoe_id (str): the shoe id to update
+            quantity (int): the quantity to add
+        """
         item = next((i for i in self.items if i.shoe_id == shoe_id), None)
         if item:
             item.quantity = quantity
             item.update_total_price()
 
-    def remove_item(self, shoe_id):
-        """Remove an item from the cart"""
+    def remove_item(self, shoe_id: str):
+        """Remove an item from the cart
+
+        Args:
+            shoe_id (str): the id of the product (shoe)
+        """
         self.items = [item for item in self.items if item.shoe_id != shoe_id]
 
     def calculate_total(self):
@@ -62,9 +85,9 @@ class Cart(BaseModel, Base):
 
     def to_order(self):
         """Convert the cart into an order"""
-        from backend.models.order import Order  # Import here to avoid circular import issues
+        from backend.models.order import Order
 
         order = Order(user_id=self.user_id)
-        order.items = self.items[:]  # Shallow copy of items list
+        order.items = self.items[:]
         order.calculate_total()
         return order
