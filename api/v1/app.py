@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 """Flask app to control API"""
+import markdown
 from flask import Flask, make_response, jsonify
+from markupsafe import Markup
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from api.v1.views import app_views
@@ -36,6 +38,17 @@ swaggerui_blueprint = get_swaggerui_blueprint(
 )
 
 app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
+
+
+@app.route('/', methods=['GET'], strict_slashes=False)
+def index():
+    """Serve a markdown file as the landing page."""
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    readme_path = os.path.join(base_dir, '../../README.md')
+    with open(readme_path, 'r') as f:
+        content = f.read()
+    return Markup(markdown.markdown(content))
+
 
 # Error handlers
 @app.errorhandler(404)

@@ -38,7 +38,7 @@ JWS Collections is an e-commerce platform API built using Flask and SQLAlchemy. 
 3. Install the dependencies:
 
     ```bash
-    pip install -r requirements.txt
+    pip3 install -r requirements.txt
     ```
 
 4. Create a `.env` file to store your environment variables:
@@ -71,6 +71,7 @@ JWS Collections is an e-commerce platform API built using Flask and SQLAlchemy. 
 
 - **Sign Up**: POST `/api/v1/signup`
 User sign up to create new user. New User:
+
 ```bash
 curl -X 'POST' \
   'https://{host | localhost}:{port number | 5000 | 8000}/api/v1/signup' \
@@ -85,8 +86,10 @@ curl -X 'POST' \
 }'
   -H 'accept: application/json'
 ```
+
 - **Log In**: POST `/api/v1/login`
 Log in to use API, this returns a session token for authorization use
+
 ```bash
 curl -X 'POST' \
   'https://{host | localhost}:{port number | 5000 | 8000}/api/v1/login' \
@@ -102,6 +105,7 @@ curl -X 'POST' \
 
 - **Add Product**: POST `/api/v1/products` (Admin only)
 This route is for admin use only to create and add new product to database.
+
 ```bash
 curl -X 'POST' \
   'https://{host | localhost}:{port number | 5000 | 8000}/api/v1/products' \
@@ -120,6 +124,7 @@ curl -X 'POST' \
 
 - **Update Product**: PUT `/api/v1/products/<id>` (Admin only)
 Updating products in database, restricted to add use only
+
 ```bash
 curl -X 'PUT' \
   'https://{host | localhost}:{port number | 5000 | 8000}/api/v1/products/{id of the product}' \
@@ -131,14 +136,18 @@ curl -X 'PUT' \
   "shoe_color": "yellow"
 }'
 ```
+
 - **List Products**: GET `/api/v1/products` (Global to anybody, no signin required)
 Retrieve all stocks and products available in database
+
 ```bash
 curl -X 'GET' \
   'https://{host | localhost}:{port number | 5000 | 8000}/api/v1/products'
 ```
+
 - **Delete Product**: DELETE `/api/v1/products/<id>` (Admin only)
 Product deletion restricted to only Admins
+
 ```bash
 curl -X 'DELETE' \
   'https://{host | localhost}:{port number | 5000 | 8000}/api/v1/products/{ the id of product }' \
@@ -152,6 +161,7 @@ curl -X 'DELETE' \
 - **Add to Cart**: POST `/api/v1/cart/add`
 Add product to cart. New cart created if not available
 Only logged in users
+
 ```bash
 curl -X 'POST' \
   'https://{host | localhost}:{port number | 5000 | 8000}/api/v1/cart/add' \
@@ -163,8 +173,10 @@ curl -X 'POST' \
   "quantity": 1
 }'
 ```
+
 - **View Cart**: GET `/api/v1/cart`
 Retrieves the cart of logged in user
+
 ```bash
 curl -X 'GET' \
   'https://{host | localhost}:{port number | 5000 | 8000}/api/v1/cart' \
@@ -172,8 +184,10 @@ curl -X 'GET' \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer {your session token}'
 ```
+
 - **View All Carts**: GET `/api/v1/carts` (Admin only)
 Restricted to only admins. To get all carts
+
 ```bash
 curl -X 'GET' \
   'https://{host | localhost}:{port number | 5000 | 8000}/api/v1/carts' \
@@ -186,6 +200,7 @@ curl -X 'GET' \
 
 - **Checkout**: POST `/api/v1/checkout`
 Cart checking and payment implementation of logged in user
+
 ```bash
 curl -X 'POST' \
   'https://{host | localhost}:{port number | 5000 | 8000}/api/v1/checkout' \
@@ -193,8 +208,10 @@ curl -X 'POST' \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer {your session token}'
 ```
+
 - **View All Orders**: GET `/api/v1/orders/<order_id>` (Admin only)
 Get all orders made, restricted to only admins
+
 ```bash
 curl -X 'GET' \
   'https://{host | localhost}:{port number | 5000 | 8000}/api/v1/orders/{order id}' \
@@ -211,7 +228,7 @@ curl -X 'GET' \
 
 The API documentation is available at `/swagger`
 
-Visit: [On Render](https://jws-collections.onrender.com/swagger/)
+Visit: [On Vercel](https://jws-collections.onrender.com/swagger/)
 
 ## Contributing
 
@@ -224,11 +241,11 @@ Visit: [On Render](https://jws-collections.onrender.com/swagger/)
 ## Development
 The Database storage method has been thoroughly tested as compared to the File storage system which might shows which is under development.
 
-`Please use database storage`
+`Please use database storage i.e STORAGE_METHOD=db`
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/wiseman-umanah/JWS_COLLECTIONS/blob/master/LICENSE) file for details.
 
 ## Acknowledgments
 
@@ -245,5 +262,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 Buy us a coffee ☕
-
-You might experience downtime using while using our API because Render will spin down due to inactivity.
