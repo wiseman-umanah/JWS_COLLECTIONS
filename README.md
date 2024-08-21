@@ -228,7 +228,7 @@ curl -X 'GET' \
 
 The API documentation is available at `/swagger`
 
-Visit: [On Vercel](https://jws-collections.onrender.com/swagger/)
+Visit: [On Vercel](https://jws-collections.vercel.app/swagger/)
 
 ## Contributing
 
