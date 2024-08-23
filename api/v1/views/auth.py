@@ -4,7 +4,7 @@ from api.v1.views import app_views
 from backend.models.user import User
 from backend.models import storage
 from flask import jsonify, request, abort
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, get_jwt_identity, create_refresh_token, jwt_required
 
 
 @app_views.route('/login', methods=['POST'], strict_slashes=False)
@@ -27,8 +27,9 @@ def login():
         if not user or not user.check_password(password):
             return jsonify({'message': 'Invalid credentials'}), 401
 
-        access_token = create_access_token(identity={'email': email, 'role': user.role, 'id': user.id})
-        return jsonify({'token': access_token}), 200
+        access_token = create_access_token(identity={'role': user.role, 'id': user.id})
+        refresh_token = create_refresh_token(identity={'role': user.role, 'id': user.id})
+        return jsonify({'access_token': access_token, 'refresh_token': refresh_token}), 200
     except Exception:
         abort(500)
 
@@ -64,3 +65,10 @@ def signup():
         return jsonify({'message': 'User created successfully'}), 201
     except Exception as e:
         return jsonify({'message': str(e)}), 500
+
+@app_views.route('/refresh', methods=['POST'], strict_slashes=False)
+@jwt_required(refresh=True)
+def refresh():
+    current_user = get_jwt_identity()
+    new_access_token = create_access_token(identity=current_user)
+    return jsonify({'access_token': new_access_token}), 200
