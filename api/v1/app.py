@@ -27,7 +27,7 @@ jwt = JWTManager(app)
 app.register_blueprint(app_views)
 
 
-# cors = CORS(app, resources={r"/*": {"origins": "http://192.168.0.158:5000"}})
+cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 
 SWAGGER_URL = '/swagger'
