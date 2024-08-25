@@ -9,7 +9,7 @@ from flask import jsonify, abort
 from api.v1.utils.authorization import get_current_user
 
 
-@app_views.route('/orders', methods=['GET'], strict_slashes=False)
+@app_views.route('/orders', methods=['GET', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
 @role_required('admin')
 def get_allOrders():
@@ -49,7 +49,7 @@ def get_order_by_id(id):
         abort(500)
 
 
-@app_views.route('/checkout', methods=['POST'], strict_slashes=False)
+@app_views.route('/checkout', methods=['POST', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
 def checkout():
     """Handle checkout of user

@@ -91,7 +91,7 @@ def get_productById(id):
         abort(500)
 
 
-@app_views.route('/products', methods=['POST'], strict_slashes=False)
+@app_views.route('/products', methods=['POST', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
 @role_required('admin')
 def create_product():
@@ -125,7 +125,7 @@ def create_product():
         return jsonify({'message': str(e)}), 400
 
 
-@app_views.route('/products/<id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('/products/<id>', methods=['PUT', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
 @role_required('admin')
 def update_product(id):
@@ -154,7 +154,7 @@ def update_product(id):
         abort(500)
 
 
-@app_views.route('/products/<id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/products/<id>', methods=['DELETE', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
 @role_required('admin')
 def delete_product(id):

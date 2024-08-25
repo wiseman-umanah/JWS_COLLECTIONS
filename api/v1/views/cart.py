@@ -10,7 +10,7 @@ from flask import jsonify, request, abort
 from api.v1.utils.authorization import get_current_user
 
 
-@app_views.route('/carts', methods=['GET'], strict_slashes=False)
+@app_views.route('/carts', methods=['GET', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
 @role_required('admin')
 def get_allCarts():
@@ -50,7 +50,7 @@ def get_cart_by_id(id: str):
         abort(500)
 
 
-@app_views.route('/cart', methods=['GET'], strict_slashes=False)
+@app_views.route('/cart', methods=['GET', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
 def get_user_cart():
     """Retrieves current user cart
@@ -72,7 +72,7 @@ def get_user_cart():
         abort(500)
 
 
-@app_views.route('/cart/add', methods=['POST'], strict_slashes=False)
+@app_views.route('/cart/add', methods=['POST', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
 def add_to_cart():
     """Adds an item to cart

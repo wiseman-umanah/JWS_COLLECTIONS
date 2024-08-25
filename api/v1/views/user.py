@@ -8,7 +8,7 @@ from backend.models.user import User
 from flask import jsonify, request, abort
 
 
-@app_views.route('/users', methods=['GET'], strict_slashes=False)
+@app_views.route('/users', methods=['GET', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
 @role_required('admin')
 def users():
@@ -28,7 +28,7 @@ def users():
         abort(500)
 
 
-@app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/users/<user_id>', methods=['GET', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
 def get_user_profile(user_id):
     """Get user based on id
@@ -48,7 +48,7 @@ def get_user_profile(user_id):
         abort(500)
 
 
-@app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('/users/<user_id>', methods=['PUT', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
 def update_user_profile(user_id):
     """updates a user object, based on id

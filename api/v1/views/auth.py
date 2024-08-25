@@ -66,7 +66,7 @@ def signup():
     except Exception as e:
         return jsonify({'message': str(e)}), 500
 
-@app_views.route('/refresh', methods=['POST'], strict_slashes=False)
+@app_views.route('/refresh', methods=['POST', 'OPTIONS'], strict_slashes=False)
 @jwt_required(refresh=True)
 def refresh():
     current_user = get_jwt_identity()
