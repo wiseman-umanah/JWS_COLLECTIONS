@@ -30,7 +30,7 @@ app.register_blueprint(app_views)
 CORS(app, resources={
     r"/api/v1/*": {
         "origins": "*",
-        "methods": ["GET", "POST", "PUT", "DELETE"],
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization"],
         "supports_credentials": True
     }
