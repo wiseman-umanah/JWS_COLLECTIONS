@@ -6,7 +6,7 @@ from backend.models.shoe import Shoe
 from flask import jsonify, request, abort
 from flask_jwt_extended import jwt_required
 from api.v1.utils.authorization import role_required
-from flask_cors import cross_origin
+
 
 @app_views.route('/products', methods=['GET'], strict_slashes=False)
 def get_products():
@@ -93,7 +93,6 @@ def get_productById(id):
 
 @app_views.route('/products', methods=['POST', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
-@cross_origin()
 @role_required('admin')
 def create_product():
     """Admin creation of new product
@@ -128,7 +127,6 @@ def create_product():
 
 @app_views.route('/products/<id>', methods=['PUT', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
-@cross_origin()
 @role_required('admin')
 def update_product(id):
     """updates a product, restricted to admin
@@ -158,7 +156,6 @@ def update_product(id):
 
 @app_views.route('/products/<id>', methods=['DELETE', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
-@cross_origin()
 @role_required('admin')
 def delete_product(id):
     """Deleting product restricted to admin

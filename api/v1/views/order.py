@@ -7,11 +7,10 @@ from backend.models import storage
 from backend.models.order import Order
 from flask import jsonify, abort
 from api.v1.utils.authorization import get_current_user
-from flask_cors import cross_origin
+
 
 @app_views.route('/orders', methods=['GET', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
-@cross_origin()
 @role_required('admin')
 def get_allOrders():
     """Retrieves all orders created
@@ -51,7 +50,6 @@ def get_order_by_id(id):
 
 
 @app_views.route('/checkout', methods=['POST', 'OPTIONS'], strict_slashes=False)
-@cross_origin()
 @jwt_required()
 def checkout():
     """Handle checkout of user
