@@ -8,9 +8,11 @@ from backend.models.cart import Cart
 from backend.models.shoe import Shoe
 from flask import jsonify, request, abort
 from api.v1.utils.authorization import get_current_user
+from flask_cors import cross_origin
 
 
 @app_views.route('/carts', methods=['GET', 'OPTIONS'], strict_slashes=False)
+@cross_origin()
 @jwt_required()
 @role_required('admin')
 def get_allCarts():
@@ -51,6 +53,7 @@ def get_cart_by_id(id: str):
 
 
 @app_views.route('/cart', methods=['GET', 'OPTIONS'], strict_slashes=False)
+@cross_origin()
 @jwt_required()
 def get_user_cart():
     """Retrieves current user cart
@@ -73,6 +76,7 @@ def get_user_cart():
 
 
 @app_views.route('/cart/add', methods=['POST', 'OPTIONS'], strict_slashes=False)
+@cross_origin()
 @jwt_required()
 def add_to_cart():
     """Adds an item to cart

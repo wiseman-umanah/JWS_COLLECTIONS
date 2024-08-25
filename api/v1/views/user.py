@@ -6,10 +6,11 @@ from api.v1.utils.authorization import role_required
 from backend.models import storage
 from backend.models.user import User
 from flask import jsonify, request, abort
-
+from flask_cors import cross_origin
 
 @app_views.route('/users', methods=['GET', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
+@cross_origin()
 @role_required('admin')
 def users():
     """Retrieves all Users restricted to admin
@@ -30,6 +31,7 @@ def users():
 
 @app_views.route('/users/<user_id>', methods=['GET', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
+@cross_origin()
 def get_user_profile(user_id):
     """Get user based on id
 
@@ -50,6 +52,7 @@ def get_user_profile(user_id):
 
 @app_views.route('/users/<user_id>', methods=['PUT', 'OPTIONS'], strict_slashes=False)
 @jwt_required()
+@cross_origin()
 def update_user_profile(user_id):
     """updates a user object, based on id
 
