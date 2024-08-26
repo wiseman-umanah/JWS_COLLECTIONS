@@ -85,32 +85,29 @@ def add_to_cart():
     Returns:
         json: success | failed
     """
-    try:
-        user = get_current_user()
-        if not user:
-            return jsonify({'error': 'User not found'}), 404
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
 
-        data = request.get_json()
-        shoe_id = data.get('shoe_id')
-        quantity = data.get('quantity', 1)
+    data = request.get_json()
+    shoe_id = data.get('shoe_id')
+    quantity = data.get('quantity', 1)
 
-        # Retrieve the shoe
-        shoe = storage.get(Shoe, shoe_id)
-        if not shoe:
-            return jsonify({'error': 'Shoe not found'}), 404
+    # Retrieve the shoe
+    shoe = storage.get(Shoe, shoe_id)
+    if not shoe:
+        return jsonify({'error': 'Shoe not found'}), 404
 
-        # Retrieve or create the cart
-        cart = storage.get_cart_by_userId(user.id)
-        if not cart:
-            cart = Cart(user_id=user.id)
-            storage.new(cart)
+    # Retrieve or create the cart
+    cart = storage.get_cart_by_userId(user.id)
+    if not cart:
+        cart = Cart(user_id=user.id)
+        storage.new(cart)
 
-        cart.add_item(shoe_name=shoe.shoe_name,
-                      shoe_id=shoe.id, quantity=quantity,
-                      price=shoe.shoe_price)
+    cart.add_item(shoe_name=shoe.shoe_name,
+                    shoe_id=shoe.id, quantity=quantity,
+                    price=shoe.shoe_price)
 
-        storage.save()
+    storage.save()
 
-        return jsonify({'message': 'Item added to cart successfully'}), 200
-    except Exception:
-        abort(500)
+    return jsonify({'message': 'Item added to cart successfully'}), 200
