@@ -82,16 +82,13 @@ def get_productById(id):
     Returns:
         json (dict): dictionary repr of the product
     """
-    try:
-        shoe_obj = storage.get(Shoe, id)
-        if not shoe_obj:
-            return jsonify({'error': 'Product not found'}), 404
-        return jsonify(shoe_obj.to_dict()), 200
-    except Exception:
-        abort(500)
+    shoe_obj = storage.get(Shoe, id)
+    if not shoe_obj:
+        return jsonify({'error': 'Product not found'}), 404
+    return jsonify(shoe_obj.to_dict()), 200
 
 
-@app_views.route('/products', methods=['POST', 'OPTIONS'], strict_slashes=False)
+@app_views.route('/products', methods=['POST'], strict_slashes=False)
 @jwt_required()
 @role_required('admin')
 def create_product():
@@ -125,7 +122,7 @@ def create_product():
         return jsonify({'message': str(e)}), 400
 
 
-@app_views.route('/products/<id>', methods=['PUT', 'OPTIONS'], strict_slashes=False)
+@app_views.route('/products/<id>', methods=['PUT'], strict_slashes=False)
 @jwt_required()
 @role_required('admin')
 def update_product(id):
@@ -139,22 +136,19 @@ def update_product(id):
     """
     data = request.get_json()
     product = storage.get(Shoe, id)
-    try:
-        if not product:
-            return jsonify({'message': 'Product not found'}), 404
+    if not product:
+        return jsonify({'message': 'Product not found'}), 404
 
-        # Update product fields
-        for key, value in data.items():
-            if hasattr(product, key) and key not in ['id', 'created_at', 'updated_at']:
-                setattr(product, key, value)
+    # Update product fields
+    for key, value in data.items():
+        if hasattr(product, key) and key not in ['id', 'created_at', 'updated_at']:
+            setattr(product, key, value)
 
-        storage.save()
-        return jsonify(product.to_dict()), 200
-    except Exception:
-        abort(500)
+    storage.save()
+    return jsonify(product.to_dict()), 200
 
 
-@app_views.route('/products/<id>', methods=['DELETE', 'OPTIONS'], strict_slashes=False)
+@app_views.route('/products/<id>', methods=['DELETE'], strict_slashes=False)
 @jwt_required()
 @role_required('admin')
 def delete_product(id):
@@ -167,12 +161,10 @@ def delete_product(id):
         json (dict): successful or failure
     """
     product = storage.get(Shoe, id)
-    try:
-        if not product:
-            return jsonify({'message': 'Product not found'}), 404
+    if not product:
+        return jsonify({'message': 'Product not found'}), 404
 
-        storage.delete(product)
-        storage.save()
-        return jsonify({'message': 'Product deleted successfully'}), 200
-    except Exception:
-        abort(500)
+    storage.delete(product)
+    storage.save()
+    return jsonify({'message': 'Product deleted successfully'}), 200
+

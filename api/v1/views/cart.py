@@ -6,11 +6,11 @@ from api.v1.utils.authorization import role_required
 from backend.models import storage
 from backend.models.cart import Cart
 from backend.models.shoe import Shoe
-from flask import jsonify, request, abort
+from flask import jsonify, request
 from api.v1.utils.authorization import get_current_user
 
 
-@app_views.route('/carts', methods=['GET', 'OPTIONS'], strict_slashes=False)
+@app_views.route('/carts', methods=['GET'], strict_slashes=False)
 @jwt_required()
 @role_required('admin')
 def get_allCarts():
@@ -19,16 +19,13 @@ def get_allCarts():
     Returns:
         json (list): A list containing all carts
     """
-    try:
-        list_carts = []
-        carts = storage.all(Cart).values()
-        if not carts:
-            return jsonify({'Error': 'No cart available in database'})
-        for cart in carts:
-            list_carts.append(cart.to_dict())
-        return jsonify(list_carts), 200
-    except Exception:
-        abort(500)
+    list_carts = []
+    carts = storage.all(Cart).values()
+    if not carts:
+        return jsonify({'Error': 'No cart available in database'})
+    for cart in carts:
+        list_carts.append(cart.to_dict())
+    return jsonify(list_carts), 200
 
 
 @app_views.route('/carts/<id>', methods=['GET'], strict_slashes=False)
@@ -41,16 +38,13 @@ def get_cart_by_id(id: str):
     Returns:
         json(dict): json dictionary repr of the Cart
     """
-    try:
-        cart_obj = storage.get(Cart, id)
-        if not cart_obj:
-            return jsonify({'error': 'Cart not found'}), 404
-        return jsonify(cart_obj.to_dict()), 200
-    except Exception:
-        abort(500)
+    cart_obj = storage.get(Cart, id)
+    if not cart_obj:
+        return jsonify({'error': 'Cart not found'}), 404
+    return jsonify(cart_obj.to_dict()), 200
 
 
-@app_views.route('/cart', methods=['GET', 'OPTIONS'], strict_slashes=False)
+@app_views.route('/cart', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_user_cart():
     """Retrieves current user cart
@@ -58,18 +52,15 @@ def get_user_cart():
     Returns:
         json(dict): json dictionary repr of the Cart
     """
-    try:
-        user = get_current_user()
-        if not user:
-            return jsonify({'error': 'User not found'}), 404
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
 
-        cart = storage.get_cart_by_userId(user.id)
-        if not cart:
-            return jsonify({'message': 'Cart is empty'}), 200
+    cart = storage.get_cart_by_userId(user.id)
+    if not cart:
+        return jsonify({'message': 'Cart is empty'}), 200
 
-        return jsonify(cart.to_dict()), 200
-    except Exception:
-        abort(500)
+    return jsonify(cart.to_dict()), 200
 
 
 @app_views.route('/cart/add', methods=['POST'], strict_slashes=False)

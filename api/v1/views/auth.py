@@ -3,7 +3,7 @@
 from api.v1.views import app_views
 from backend.models.user import User
 from backend.models import storage
-from flask import jsonify, request, abort
+from flask import jsonify, request
 from flask_jwt_extended import create_access_token, get_jwt_identity, create_refresh_token, jwt_required
 
 
@@ -14,24 +14,21 @@ def login():
     Returns:
         json: returns a json format with the token
     """
-    try:
-        data = request.get_json()
-        email = data.get('email')
-        password = data.get('password')
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
 
-        if not email or not password:
-            return jsonify({'message': 'Email and password are required'}), 400
+    if not email or not password:
+        return jsonify({'message': 'Email and password are required'}), 400
 
-        user = storage.get_user_by_email(email)
+    user = storage.get_user_by_email(email)
 
-        if not user or not user.check_password(password):
-            return jsonify({'message': 'Invalid credentials'}), 401
+    if not user or not user.check_password(password):
+        return jsonify({'message': 'Invalid credentials'}), 401
 
-        access_token = create_access_token(identity={'role': user.role, 'id': user.id})
-        refresh_token = create_refresh_token(identity={'role': user.role, 'id': user.id})
-        return jsonify({'access_token': access_token, 'refresh_token': refresh_token}), 200
-    except Exception:
-        abort(500)
+    access_token = create_access_token(identity={'role': user.role, 'id': user.id})
+    refresh_token = create_refresh_token(identity={'role': user.role, 'id': user.id})
+    return jsonify({'access_token': access_token, 'refresh_token': refresh_token}), 200
 
 
 @app_views.route('/signup', methods=['POST'], strict_slashes=False)
