@@ -30,7 +30,7 @@ class Cart(BaseModel, Base):
                 if key != "__class__":
                     setattr(self, key, value)
 
-    def add_item(self, shoe_name: str, shoe_id: str, quantity: int, price: float):
+    def add_item(self, shoe_name: str, shoe_id: str, shoe_image: str, quantity: int, price: float):
         """Add an item to the cart or update quantity if it already exists
 
         Args:
@@ -47,6 +47,7 @@ class Cart(BaseModel, Base):
             new_item = CartItem(
                 cart_id=self.id, shoe_name=shoe_name,
                 shoe_id=shoe_id, quantity=quantity,
+                shoe_image=shoe_image,
                 price=price, total_price=quantity * price)
             self.items.append(new_item)
 

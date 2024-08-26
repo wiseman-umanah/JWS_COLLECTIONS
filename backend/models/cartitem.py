@@ -17,6 +17,7 @@ class CartItem(BaseModel, Base):
         cart_id = Column(String(100), ForeignKey('carts.id'), nullable=False)
         shoe_id = Column(String(100), nullable=False)
         shoe_name = Column(String(128), nullable=False)
+        _shoe_image = Column(String(256), nullable=False)
         quantity = Column(Float, nullable=False)
         _price = Column(Float, nullable=False)
         _total_price = Column(Float, nullable=False)
@@ -29,6 +30,7 @@ class CartItem(BaseModel, Base):
             self.cart_id = ""
             self.shoe_id = ""
             self.shoe_name = ""
+            self._shoe_image = ""
             self.quantity = 0
             self._price = 0.0
             self._total_price = 0.0
@@ -91,6 +93,27 @@ class CartItem(BaseModel, Base):
         """Updates total price based on quantity"""
         self.total_price = self.quantity * self.price
 
+    @property
+    def shoe_image(self) -> str:
+        """Get shoe image path"""
+        return self._shoe_image
+
+    @shoe_image.setter
+    def shoe_image(self, value: str):
+        """Sets image path
+
+        Args:
+            value (str): the image path
+
+        Raises:
+            ValueError: shoe must be a valid path
+        """
+        if isinstance(value, str) and value.startswith(("http://", "https://", "/")):
+            self._shoe_image = value
+        else:
+            raise ValueError("Shoe image must be a valid URL or path")
+
+
     def to_dict(self):
         """Returns the dictionary representation of cart item"""
         return {
@@ -98,6 +121,7 @@ class CartItem(BaseModel, Base):
             'cart_id': self.cart_id,
             'shoe_id': self.shoe_id,
             'shoe_name': self.shoe_name,
+            'shoe_image': self.shoe_image,
             'quantity': self.quantity,
             'price': self.price,
             'total_price': self.total_price,

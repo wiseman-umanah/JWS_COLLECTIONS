@@ -95,7 +95,7 @@ def add_to_cart():
         cart = Cart(user_id=user.id)
         storage.new(cart)
 
-    cart.add_item(shoe_name=shoe.shoe_name,
+    cart.add_item(shoe_name=shoe.shoe_name, shoe_image=shoe.shoe_image,
                     shoe_id=shoe.id, quantity=quantity,
                     price=shoe.shoe_price)
 
