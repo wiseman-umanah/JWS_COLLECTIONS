@@ -43,7 +43,29 @@ def get_order_by_id(id):
     return jsonify(order_obj.to_dict()), 200
 
 
-@app_views.route('/checkout', methods=['POST', 'OPTIONS'], strict_slashes=False)
+@app_views.route('/order', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_user_order():
+    """Retrieves current user order
+
+    Returns:
+        json(dict): json dictionary repr of the Order
+    """
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    list_order = []
+    orders = storage.all(Order).values()
+    if not orders:
+        return jsonify({'Error': 'No order available yet'})
+    for order in orders:
+        if order.user_id == user.id:
+            list_order.append(order.to_dict())
+    return jsonify(list_order), 200
+
+
+@app_views.route('/checkout', methods=['POST'], strict_slashes=False)
 @jwt_required()
 def checkout():
     """Handle checkout of user

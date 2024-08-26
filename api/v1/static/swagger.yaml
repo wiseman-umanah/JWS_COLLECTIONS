@@ -436,6 +436,44 @@ paths:
                   error:
                     type: string
                     example: 'Order not found'
+  /order:
+    get:
+      summary: Get user's orders
+      description: Retrieve the current user's cart.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                  user_id:
+                    type: string
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User not found"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized"
 
   /checkout:
     post:
