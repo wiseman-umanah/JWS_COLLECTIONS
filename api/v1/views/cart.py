@@ -72,7 +72,7 @@ def get_user_cart():
         abort(500)
 
 
-@app_views.route('/cart/add', methods=['POST', 'OPTIONS'], strict_slashes=False)
+@app_views.route('/cart/add', methods=['POST'], strict_slashes=False)
 @jwt_required()
 def add_to_cart():
     """Adds an item to cart
