@@ -91,7 +91,7 @@ def add_to_cart():
 
     data = request.get_json()
     shoe_id = data.get('shoe_id')
-    quantity = data.get('quantity', 1)
+    quantity = int(data.get('quantity', 1))
 
     # Retrieve the shoe
     shoe = storage.get(Shoe, shoe_id)
