@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JWS Collections | Store</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ url_for('static', filename='images/icons/logo3.png') }}" type="image/icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/general.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/store-header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/store.css')}}">
+    <script src="{{ url_for('static', filename='scripts/utils/tokenManager.js')}}"></script>
+  </head>
+  <body>
+    <header class="jws-header">
+      <div class="jws-header-left-section">
+        <a href="{{ url_for('index')}}">
+          <img class="jws-logo"
+            src="{{ url_for('static', filename='images/icons/logo2.png')}}">
+        </a>
+      </div>
+
+      <div class="jws-header-middle-section">
+        <input class="search-bar" type="text" placeholder="Search">
+
+        <button class="search-button">
+          <img class="search-icon" src="{{ url_for('static', filename='images/icons/search-icon.png')}}">
+        </button>
+      </div>
+
+      <div class="jws-header-right-section">
+        <a class="orders-link header-link" href="{{ url_for('order') }}">
+          <span class="returns-text">Returns</span>
+          <span class="orders-text">& Orders</span>
+        </a>
+
+        <a class="cart-link header-link" href="{{url_for('checkout')}}">
+          <img class="cart-icon" src="{{url_for('static', filename='images/icons/cart-icon.png')}}">
+          <div class="cart-quantity js-cart-quantity"></div>
+          <div class="cart-text">Cart</div>
+        </a>
+        <div class="user-initial">
+          <img src="{{ url_for('static', filename='images/icons/user-regular-36.png')}}">
+        </div>
+      </div>
+    </header>
+    <div class="sidebar">
+      <div class="categories-section">
+        <p>Categories:</p>
+        <label for="men">
+          <input type="radio" id="men" name="category" value="men">Men
+        </label><br>
+        <label for="women">
+          <input type="radio" id="women" name="category" value="women">Women
+        </label><br>
+        <label for="kids">
+          <input type="radio" id="kids" name="category" value="kids">Kids
+        </label><br>
+        <label for="sports">
+          <input type="radio" id="sports" name="category" value="sports">Sports
+        </label><br>
+        <label for="sneakers">
+          <input type="radio" id="sneakers" name="category" value="sneakers">Sneakers
+        </label><br>
+        <label for="all">
+          <input type="radio" id="all" name="category" value="">All
+        </label><br>
+      </div>
+      <div class="brands-section">
+        <p>Brands:</p>
+        <label for="nike">
+          <input type="radio" id="nike" name="brand" value="Nike">Nike
+        </label><br>
+        <label for="puma">
+          <input type="radio" id="puma" name="brand" value="Puma">Puma
+        </label><br>
+        <label for="adidas">
+          <input type="radio" id="adidas" name="brand" value="Adidas">Adidas
+        </label><br>
+        <label for="all-brand">
+          <input type="radio" id="all" name="brand" value="">All
+        </label><br>
+      </div>
+      <div class="input-filter">
+        <label for="min-price">Min. Price
+          <input type="number" id="min-price" name="min-price" min="1">
+        </label>
+      </div>
+      <div class="input-filter">
+        <label for="max-price">Max. Price
+          <input type="number" id="max-price" name="max-price" min="1">
+        </label>
+      </div>
+      <div class="color-input">
+        <label for="color">Color</label><br>
+        <input type="text" id="color" name="color">
+      </div>
+    </div>
+    <div class="main">
+      <div class="products-grid js-products-grid"></div>
+      <div class="pagination">
+        <button class="prev-page">&lt;&lt;</button>
+        <span class="current-page">Page 1</span>
+        <button class="next-page">&gt;&gt;</button>
+      </div>
+    <script type="module" src="{{ url_for('static', filename='scripts/store.js')}}"></script>
+    <script type="module" src="{{ url_for('static', filename='scripts/store_cart.js')}}"></script>
+  </body>
+</html>

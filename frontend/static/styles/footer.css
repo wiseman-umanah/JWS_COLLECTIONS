@@ -1,0 +1,65 @@
+/* Contains footer styles */
+footer {
+    color: black;
+    border-top: 2px solid rgb(198, 198, 198);
+}
+
+footer details {
+    border-bottom: 2px solid rgb(198, 198, 198);
+    padding: 30px;
+    font-size: 1rem;
+}
+
+footer details summary {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+footer details summary::after {
+    content: '';
+    width: 0; 
+    height: 0; 
+    border-top: 10px solid rgb(101, 101, 101);
+    border-inline: 7px solid transparent;
+    transition: 0.2s;
+}
+
+footer details[open] > summary::after {
+  transform: rotate(-180deg);
+}
+
+.properties li {
+    list-style: none;
+    padding: 20px 0;
+    color: grey;
+}
+
+.properties a{
+    text-decoration: none;
+}
+
+footer .footage {
+    width: 80%;
+    margin: 50px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    color: gray;
+}
+
+
+@media only screen and (min-width: 760px) {
+    footer details summary {
+        justify-content: center;
+    }
+    .properties li {
+        text-align: center;
+    }
+    footer details summary::after {
+        display: none;
+    }
+}

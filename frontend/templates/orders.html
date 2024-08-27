@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JWS Collections | Orders</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ url_for('static', filename='images/icons/logo3.png') }}" type="image/icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/general.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/store-header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/orders.css') }}">
+    <script src="{{ url_for('static', filename='scripts/utils/tokenManager.js')}}"></script>
+  </head>
+  <body>
+    <header class="jws-header">
+      <div class="jws-header-left-section">
+        <a href="{{ url_for('index')}}">
+          <img class="jws-logo"
+            src="{{ url_for('static', filename='images/icons/logo2.png')}}">
+        </a>
+      </div>
+
+      <div class="jws-header-middle-section">
+        <input class="search-bar" type="text" placeholder="Search">
+
+        <button class="search-button">
+          <img class="search-icon" src="{{ url_for('static', filename='images/icons/search-icon.png')}}">
+        </button>
+      </div>
+
+      <div class="jws-header-right-section">
+        <a class="orders-link header-link" href="{{ url_for('order') }}">
+          <span class="returns-text">Returns</span>
+          <span class="orders-text">& Orders</span>
+        </a>
+
+        <a class="cart-link header-link" href="{{url_for('checkout')}}">
+          <img class="cart-icon" src="{{url_for('static', filename='images/icons/cart-icon.png')}}">
+          <div class="cart-quantity js-cart-quantity"></div>
+          <div class="cart-text">Cart</div>
+        </a>
+        <div class="user-initial">
+          <img src="{{ url_for('static', filename='images/icons/user-regular-36.png')}}">
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="page-title">Your Orders</div>
+      <div class="orders-grid"></div>
+    </main>
+    <script type="module" src="{{ url_for('static', filename='scripts/orders.js')}}"></script>
+  </body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>JWS Collections | Checkout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ url_for('static', filename='images/icons/logo3.png') }}" type="image/icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/general.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/checkout-header.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/checkout.css')}}">
+    
+    <!-- Load jQuery first -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <!-- Token manager script for handling tokens -->
+    <script src="{{ url_for('static', filename='scripts/utils/tokenManager.js')}}"></script>
+  </head>
+  <body>
+    <header class="checkout-header">
+      <div class="header-content">
+        <div class="checkout-header-left-section">
+          <a href="{{ url_for('index')}}">
+            <img class="jws-logo" src="{{ url_for('static', filename='images/icons/logo2.png')}}" alt="JWS Logo">
+          </a>
+        </div>
+
+        <div class="checkout-header-middle-section">
+          <!-- Dynamic content for number of items in cart -->
+          Checkout (<a class="return-to-home-link" href="#">0 items</a>)
+        </div>
+
+        <div class="checkout-header-right-section">
+          <img src="{{ url_for('static', filename='images/icons/checkout-lock-icon.png')}}" alt="Checkout Lock">
+        </div>
+      </div>
+    </header> <!-- Use </header> instead of </div> to close the header element -->
+
+    <div class="main">
+      <div class="page-title">Review your order</div>
+      <div class="checkout-grid">
+        <!-- Order summary will be populated here by JavaScript -->
+        <div class="order-summary"></div>
+        <!-- Payment summary will be populated here by JavaScript -->
+        <div class="payment-summary"></div>
+      </div>
+    </div>
+
+    <!-- Ensure that your custom scripts are loaded after jQuery -->
+    <script type="module" src="{{ url_for('static', filename='scripts/checkout.js')}}"></script>
+    <script type="module" src="{{ url_for('static', filename='scripts/checkout_order.js')}}"></script>
+  </body>
+</html>
