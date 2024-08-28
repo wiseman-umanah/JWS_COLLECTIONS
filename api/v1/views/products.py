@@ -38,7 +38,6 @@ def get_products():
         # Apply filtering
         if category:
             products = [product for product in products if product.shoe_category == category]
-            print(products)
         if brand:
             products = [product for product in products if product.shoe_brand == brand]
         if min_price is not None:

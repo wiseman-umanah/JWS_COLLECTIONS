@@ -32,14 +32,12 @@
 
       <div class="jws-header-right-section">
         <a class="orders-link header-link" href="{{ url_for('order') }}">
-          <span class="returns-text">Returns</span>
-          <span class="orders-text">& Orders</span>
+          <span class="orders-text">Orders</span>
         </a>
 
         <a class="cart-link header-link" href="{{url_for('checkout')}}">
           <img class="cart-icon" src="{{url_for('static', filename='images/icons/cart-icon.png')}}">
           <div class="cart-quantity js-cart-quantity"></div>
-          <div class="cart-text">Cart</div>
         </a>
         <div class="user-initial">
           <img src="{{ url_for('static', filename='images/icons/user-regular-36.png')}}">
