@@ -1,3 +1,6 @@
+
+![logo1](https://github.com/user-attachments/assets/816fcb51-de2c-4091-be42-ac1f55a79295)
+
 # JWS Collections
 
 JWS Collections is an e-commerce platform API built using Flask and SQLAlchemy. It provides endpoints for user authentication, product management, cart management, and order processing. 
