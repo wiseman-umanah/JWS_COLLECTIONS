@@ -230,10 +230,14 @@ The API documentation is available at `/swagger`
 
 Visit: [On Vercel](https://jws-collections-gi44.vercel.app/swagger/)
 
+![Screenshot from 2024-08-28 18-27-01](https://github.com/user-attachments/assets/b5e3ee8a-0d19-4652-a0aa-349081da78ae)
+
 
 ## Discove App
 
 The official JWS app is available on our website [JWS](https://jws-collections.vercel.app/)
+
+![Screenshot from 2024-08-28 18-24-34](https://github.com/user-attachments/assets/5fee3f4f-7553-4865-bf47-e64b9f297a3a)
 
 
 ## Contributing
